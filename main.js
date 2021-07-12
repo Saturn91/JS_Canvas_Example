@@ -20,15 +20,18 @@ function UpdateGame(deltaTime) {
 
 function DrawGame(canvasHandler) {
     canvasHandler.cls();
+    
+    canvasHandler.drawSprite(1, 64, 0);
+    canvasHandler.drawSprite(8, 64, 64);
+
     canvasHandler.drawSprite(0, player.x,player.y);
-    canvasHandler.drawSprite(1, 10, 10);
-    canvasHandler.drawSprite(8, 100, 100);
 }
 
 GameEnvironement.functions.update = UpdateGame;
 GameEnvironement.functions.draw = DrawGame;
 GameEnvironement.functions.init = init;
 GameEnvironement.properties.debug = true;
+GameEnvironement.graphics.tileSize = 8
 
 const engine = new Engine();
 

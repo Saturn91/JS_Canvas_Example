@@ -2,6 +2,10 @@ class CanvasHandler {
     constructor(canvasID, windowWidth,  windowHeight) {
 
         this.canvas = document.getElementById(canvasID);
+        let log = Math.log(GameEnvironement.graphics.tileSize) / Math.log(2);
+        let pow = Math.pow(2, Math.round(log));
+        let valid = pow == GameEnvironement.graphics.tileSize;
+        if(!valid || GameEnvironement.graphics.tileSize > 64) console.warn('Tile size should be [1,2,4,8,16,32 or 64!]: but is ' + GameEnvironement.graphics.tileSize)
 
         if(windowWidth == undefined) { windowWidth = window.innerWidth-4 }
         if(windowHeight == undefined) { windowHeight = window.innerHeight-4 }
@@ -56,8 +60,8 @@ class CanvasHandler {
     }
 
     drawSprite(sprite, x, y) {        
-        //this.ctx.drawImage(this.spriteSheet,sx,sy,sWidth,sHeight,dx,dy,dWidth,dHeight);     
-        this.ctx.drawImage(this.spriteSheet,(sprite%8)*8,(sprite-sprite%8),8,8,Math.round(x),Math.round(y),64,64);            
+        let tileSize = GameEnvironement.graphics.tileSize; 
+        this.ctx.drawImage(this.spriteSheet,(sprite%(64/tileSize))*tileSize,(sprite-sprite%(64/tileSize)),tileSize,tileSize,Math.round(x),Math.round(y),64,64);            
     }
 
     setUpdate(update_function) {

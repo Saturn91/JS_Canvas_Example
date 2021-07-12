@@ -11,6 +11,7 @@ const GameEnvironement = {
         width: undefined,
         height: undefined,
         fps: 60,
+        tileSize: 8,
         clearColor: 0
     },  
 
