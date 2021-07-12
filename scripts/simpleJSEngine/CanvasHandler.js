@@ -9,8 +9,16 @@ class CanvasHandler {
         this.setCanvasSize(windowWidth,windowHeight)
 
         this.ctx = this.canvas.getContext('2d');
+        
+        this.spriteSheet = new Image();
+        this.spriteSheet.src = './assets/spriteSheet.jpg';   
+        console.log(`Canvas: [${this.windowWidth}x${this.windowHeight}] initialized!`);
+    }
 
-        console.log(`Canvas: [${this.windowWidth}x${this.windowHeight}] initialized!`)
+    loadResources() {
+        this.spriteSheet = new Image();
+        this.spriteSheet.src = './assets/spriteSheet.jpg';
+        return this.spriteSheet.onload;
     }
 
     setCanvasSize(windowWidth, windowHeight) {
@@ -30,8 +38,26 @@ class CanvasHandler {
         this.ctx.strokeSytle = Colors[colorNum].color;
     }
 
+    cls() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    }
+
     fillRect(x, y, w, h, col) {
         this.ctx.fillStyle = Colors[col].color;
-        mainCanvas.ctx.fillRect(x,y,w,h);
+        this.ctx.fillRect(x,y,w,h);
     }
+
+    drawSprite(sprite, x, y) {
+        this.spriteSheet.onload = function() {
+            this.ctx.drawImage(this.spriteSheet,x,y);
+        }        
+    }
+
+    setUpdate(update_function) {
+        this.update_function = update_function;
+    }
+
+    setDraw(draw_function) {
+        this.draw_function = draw_function;
+    }    
 }
