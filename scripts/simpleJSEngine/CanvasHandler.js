@@ -1,16 +1,27 @@
+function is2Component(value) {
+    let log = Math.log(value) / Math.log(2);
+    let pow = Math.pow(2, Math.round(log));
+    return pow == value;
+}
+
 class CanvasHandler {
     constructor(canvasID, windowWidth,  windowHeight) {
 
-        this.canvas = document.getElementById(canvasID);
-        let log = Math.log(GameEnvironement.graphics.tileSize) / Math.log(2);
-        let pow = Math.pow(2, Math.round(log));
-        let valid = pow == GameEnvironement.graphics.tileSize;
-        if(!valid || GameEnvironement.graphics.tileSize > 64) console.warn('Tile size should be [1,2,4,8,16,32 or 64!]: but is ' + GameEnvironement.graphics.tileSize)
+        this.canvas = document.getElementById(canvasID);        
+        
+        if(!is2Component(GameEnvironement.graphics.tileSize) || GameEnvironement.graphics.tileSize > 64) console.warn('Tile size should be [1,2,4,8,16,32 or 64!]: but is ' + GameEnvironement.graphics.tileSize)
 
-        if(windowWidth == undefined) { windowWidth = window.innerWidth-4 }
-        if(windowHeight == undefined) { windowHeight = window.innerHeight-4 }
+        if(GameEnvironement.graphics.windowWidth == undefined) { GameEnvironement.graphics.windowWidth = window.innerWidth-4 }
+        if(GameEnvironement.graphics.windowHeight == undefined) { GameEnvironement.graphics.windowHeight = window.innerHeight-4 }
 
-        this.setCanvasSize(windowWidth,windowHeight)
+        this.scaleX = GameEnvironement.graphics.windowWidth / GameEnvironement.graphics.resolutionX;
+        this.scaleY = GameEnvironement.graphics.windowHeight / GameEnvironement.graphics.resolutionY;
+
+        if(Math.abs(this.scaleX-this.scaleY) > 0.01) {
+            console.warn('resolutionX / windowWithd should be the same value as resolutionY / windowHeight! elswhise the image gets stretched!')
+        }
+
+        this.setCanvasSize(GameEnvironement.graphics.windowWidth,GameEnvironement.graphics.windowHeight)
 
         this.ctx = this.canvas.getContext('2d');
         this.ctx.imageSmoothingEnabled = false;
@@ -61,7 +72,15 @@ class CanvasHandler {
 
     drawSprite(sprite, x, y) {        
         let tileSize = GameEnvironement.graphics.tileSize; 
-        this.ctx.drawImage(this.spriteSheet,(sprite%(64/tileSize))*tileSize,(sprite-sprite%(64/tileSize)),tileSize,tileSize,Math.round(x),Math.round(y),64,64);            
+        let pos = this.getScaledPositionOnScreenInPixel(Math.round(x), Math.round(y));
+        this.ctx.drawImage(this.spriteSheet,(sprite%(64/tileSize))*tileSize,(sprite-sprite%(64/tileSize)),tileSize,tileSize,pos.x,pos.y,tileSize*this.scaleX,tileSize*this.scaleY);            
+    }
+
+    getScaledPositionOnScreenInPixel(x, y){
+        return {
+            x: Math.round(x * this.scaleX),
+            y: Math.round(y * this.scaleY)
+        }
     }
 
     setUpdate(update_function) {

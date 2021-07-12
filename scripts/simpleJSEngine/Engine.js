@@ -8,8 +8,10 @@ const GameEnvironement = {
     },
 
     graphics: {
-        width: undefined,
-        height: undefined,
+        windowWidth: 640,
+        windowHeight: 512,
+        resolutionX: 160,
+        resolutionY: 128,
         fps: 60,
         tileSize: 8,
         clearColor: 0
@@ -38,7 +40,7 @@ const GameEnvironement = {
 
 class Engine {
     constructor() {
-        new CanvasHandler(GameEnvironement.canvasID, GameEnvironement.graphics.width, GameEnvironement.graphics.height)
+        new CanvasHandler(GameEnvironement.canvasID, GameEnvironement.graphics.windowWidth, GameEnvironement.graphics.windowHeight)
         GameEnvironement.loop = this.loop;
         if(GameEnvironement.graphics.fps > 60) {
             console.warn('60 fps is the maximal value possible [' + GameEnvironement.graphics.fps + "] gets clamped to 60!");
