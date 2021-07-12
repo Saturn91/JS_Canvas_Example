@@ -1,6 +1,12 @@
 const GameEnvironement = {
     name: "myGame",
     canvasID: 'canvasObject',
+
+    initialized: {
+        ready: false,
+        canvas: false
+    },
+
     graphics: {
         width: undefined,
         height: undefined,
@@ -24,18 +30,21 @@ const GameEnvironement = {
     internaly: {
         loop: undefined,
         lastUpdate: 0,
-        canvas: undefined
+        canvas: undefined,
+        engine: undefined
     }
 }
 
 class Engine {
     constructor() {
-        GameEnvironement.internaly.canvas = new CanvasHandler(GameEnvironement.canvasID, GameEnvironement.graphics.width, GameEnvironement.graphics.height)
+        new CanvasHandler(GameEnvironement.canvasID, GameEnvironement.graphics.width, GameEnvironement.graphics.height)
         GameEnvironement.loop = this.loop;
         if(GameEnvironement.graphics.fps > 60) {
             console.warn('60 fps is the maximal value possible [' + GameEnvironement.graphics.fps + "] gets clamped to 60!");
         }
         setTimeout(this.waitForInitialization(), 100);
+
+        GameEnvironement.internaly.engine = this;
     }
 
     loop(timestamp) {
@@ -71,37 +80,41 @@ class Engine {
         window.requestAnimationFrame(GameEnvironement.loop)
     }
 
-    waitForInitialization(){
-        if(!GameEnvironement.internaly.canvas) {
-            console.log('nope...');
-            setTimeout(this, 100);
+    waitForInitialization() {
+        GameEnvironement.initialized.ready = GameEnvironement.initialized.canvas;
+
+        if(!GameEnvironement.initialized.ready) {
+            if(GameEnvironement.properties.debug) {
+                console.log('loading resources');
+            }
+            setTimeout(this.waitForInitialization, 100);
         } else {
             if(GameEnvironement.properties.debug) {
                 console.log('Engine initialized!');
             }            
-            this.start();
+            GameEnvironement.internaly.engine.start();
         }        
     }
+}
 
-    debug(msg, component, type) {
-        if(!component) {
-            console.warn('please set componentName!');
-            component = 'unknown Component!';
-        }
-        let output = component + ': ' + msg;
-        if(!type && GameEnvironement.properties.debug)
-        {
-            console.log(output);
-            return;
-        } 
-        if(type='warning') {
-            console.warn(output);
-            return
-        }
-        if(type='error') {
-            console.error(output);
-            return
-        }
+function debug(msg, component, type) {
+    if(!component) {
+        console.warn('please set componentName!');
+        component = 'unknown Component!';
+    }
+    let output = component + ': ' + msg;
+    if(!type && GameEnvironement.properties.debug)
+    {
+        console.log(output);
+        return;
+    } 
+    if(type==='warning') {
+        console.warn(output);
+        return
+    }
+    if(type==='error') {
+        console.error(output);
+        return
     }
 }
   
