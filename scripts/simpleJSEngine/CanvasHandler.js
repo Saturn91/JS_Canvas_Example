@@ -14,8 +14,10 @@ class CanvasHandler {
         if(GameEnvironement.graphics.windowWidth == undefined) { GameEnvironement.graphics.windowWidth = window.innerWidth-4 }
         if(GameEnvironement.graphics.windowHeight == undefined) { GameEnvironement.graphics.windowHeight = window.innerHeight-4 }
 
-        this.scaleX = GameEnvironement.graphics.windowWidth / GameEnvironement.graphics.resolutionX;
-        this.scaleY = GameEnvironement.graphics.windowHeight / GameEnvironement.graphics.resolutionY;
+        this.scaleX = 1;
+        this.scaleY = 1;
+
+        
 
         if(Math.abs(this.scaleX-this.scaleY) > 0.01) {
             console.warn('resolutionX / windowWithd should be the same value as resolutionY / windowHeight! elswhise the image gets stretched!')
@@ -25,6 +27,8 @@ class CanvasHandler {
 
         this.ctx = this.canvas.getContext('2d');
         this.ctx.imageSmoothingEnabled = false;
+
+        this.ctx.scale(GameEnvironement.graphics.windowWidth / GameEnvironement.graphics.resolutionX, GameEnvironement.graphics.windowHeight / GameEnvironement.graphics.resolutionY)
 
         this.setBackgroundColor(GameEnvironement.graphics.clearColor);
         
@@ -73,6 +77,7 @@ class CanvasHandler {
     drawSprite(sprite, x, y) {        
         let tileSize = GameEnvironement.graphics.tileSize; 
         let pos = this.getScaledPositionOnScreenInPixel(Math.round(x), Math.round(y));
+        console.log(pos.x, pos.y);
         this.ctx.drawImage(this.spriteSheet,(sprite%(64/tileSize))*tileSize,(sprite-sprite%(64/tileSize)),tileSize,tileSize,pos.x,pos.y,tileSize*this.scaleX,tileSize*this.scaleY);            
     }
 
