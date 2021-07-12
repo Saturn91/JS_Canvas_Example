@@ -9,10 +9,13 @@ class CanvasHandler {
         this.setCanvasSize(windowWidth,windowHeight)
 
         this.ctx = this.canvas.getContext('2d');
+
+        this.setBackgroundColor(GameEnvironement.graphics.clearColor);
         
         this.spriteSheet = new Image();
         this.spriteSheet.src = './assets/spriteSheet.jpg';   
-        console.log(`Canvas: [${this.windowWidth}x${this.windowHeight}] initialized!`);
+
+        if(GameEnvironement.properties.debug) console.log(`Canvas: [${this.windowWidth}x${this.windowHeight}] initialized!`);
     }
 
     loadResources() {

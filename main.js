@@ -22,9 +22,9 @@ function DrawGame(canvasHandler) {
     canvasHandler.fillRect(player.x,player.y,50,50,1)
 }
 
-GameEnvironement.update = UpdateGame;
-GameEnvironement.draw = DrawGame;
-GameEnvironement.init = init;
+GameEnvironement.functions.update = UpdateGame;
+GameEnvironement.functions.draw = DrawGame;
+GameEnvironement.functions.init = init;
 
 const engine = new Engine();
 
