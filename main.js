@@ -22,19 +22,17 @@ function DrawGame(canvasHandler) {
     canvasHandler.cls();
     
     canvasHandler.drawSprite(1, 64, 0);
-    canvasHandler.drawSprite(8, 64, 8);
-
-    canvasHandler.drawSprite(0, 0,0);
-    canvasHandler.drawSprite(0, 1,8);
-    canvasHandler.drawSprite(0, 2,16);
-    canvasHandler.fillRect(player.x, 32, 8, 8, 1);
+    canvasHandler.drawSprite(1, 64.5, 8);
+    canvasHandler.drawSprite(8, 64, 16);
     canvasHandler.drawSprite(0, player.x,24);
+    canvasHandler.drawText("fps: " + Math.round(GameEnvironement.properties.actual_fps), 2, 7, 1, 100)
 }
 
 GameEnvironement.functions.update = UpdateGame;
 GameEnvironement.functions.draw = DrawGame;
 GameEnvironement.functions.init = init;
-GameEnvironement.properties.debug = false;
+
+GameEnvironement.graphics.fps = 60;
 
 const engine = new Engine();
 

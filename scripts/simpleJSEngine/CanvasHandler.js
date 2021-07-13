@@ -14,11 +14,6 @@ class CanvasHandler {
         if(GameEnvironement.graphics.windowWidth == undefined) { GameEnvironement.graphics.windowWidth = window.innerWidth-4 }
         if(GameEnvironement.graphics.windowHeight == undefined) { GameEnvironement.graphics.windowHeight = window.innerHeight-4 }
 
-        this.scaleX = 1;
-        this.scaleY = 1;
-
-        
-
         if(Math.abs(this.scaleX-this.scaleY) > 0.01) {
             console.warn('resolutionX / windowWithd should be the same value as resolutionY / windowHeight! elswhise the image gets stretched!')
         }
@@ -27,6 +22,7 @@ class CanvasHandler {
 
         this.ctx = this.canvas.getContext('2d');
         this.ctx.imageSmoothingEnabled = false;
+        this.ctx.font = '6px serif';
 
         this.ctx.scale(GameEnvironement.graphics.windowWidth / GameEnvironement.graphics.resolutionX, GameEnvironement.graphics.windowHeight / GameEnvironement.graphics.resolutionY)
 
@@ -71,7 +67,7 @@ class CanvasHandler {
 
     fillRect(x, y, w, h, col) {
         this.ctx.fillStyle = Colors[col].color;
-        this.ctx.fillRect(x,y,w,h);
+        this.ctx.fillRect(Math.round(x),Math.round(y),w,h);
     }
 
     drawSprite(sprite, x, y) {        
@@ -81,11 +77,17 @@ class CanvasHandler {
             this.spriteSheet,
             (scaleFactor)*tileSize,
             (sprite-scaleFactor),
-            tileSize,tileSize,
-            x * this.scaleX,
-            y * this.scaleY,
-            tileSize*this.scaleX,
-            tileSize*this.scaleY);            
+            tileSize,
+            tileSize,
+            Math.round(x),
+            Math.round(y),
+            tileSize,
+            tileSize);            
+    }
+
+    drawText(text, x, y, colorNum, maxWidth) {
+        this.ctx.fillStyle = Colors[colorNum].color;
+        this.ctx.fillText(text, x, y, maxWidth)
     }
 
     setUpdate(update_function) {
