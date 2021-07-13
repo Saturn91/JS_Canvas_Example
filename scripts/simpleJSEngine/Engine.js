@@ -55,13 +55,13 @@ class Engine {
         if(GameEnvironement.graphics.fps < 60) {
             inputFPS = GameEnvironement.graphics.fps;
         }
-
+        
         if(timestamp - GameEnvironement.internaly.lastUpdate >= 1000/(inputFPS)) {
             let timeDelta = timestamp - GameEnvironement.internaly.lastUpdate
-    
             if(GameEnvironement.functions.update) GameEnvironement.functions.update(timeDelta)
+            GameEnvironement.internaly.canvas.ctx.save();
             if(GameEnvironement.functions.draw) GameEnvironement.functions.draw(GameEnvironement.internaly.canvas)
-        
+            GameEnvironement.internaly.canvas.ctx.restore();
             GameEnvironement.internaly.lastUpdate = timestamp
 
             GameEnvironement.properties.actual_fps = ((GameEnvironement.properties.actual_fps-1) * 0.99 + 0.01 *  1000/timeDelta)+1; 

@@ -76,16 +76,16 @@ class CanvasHandler {
 
     drawSprite(sprite, x, y) {        
         let tileSize = GameEnvironement.graphics.tileSize; 
-        let pos = this.getScaledPositionOnScreenInPixel(Math.round(x), Math.round(y));
-        console.log(pos.x, pos.y);
-        this.ctx.drawImage(this.spriteSheet,(sprite%(64/tileSize))*tileSize,(sprite-sprite%(64/tileSize)),tileSize,tileSize,pos.x,pos.y,tileSize*this.scaleX,tileSize*this.scaleY);            
-    }
-
-    getScaledPositionOnScreenInPixel(x, y){
-        return {
-            x: Math.round(x * this.scaleX),
-            y: Math.round(y * this.scaleY)
-        }
+        let scaleFactor = sprite%(64/tileSize);
+        this.ctx.drawImage(
+            this.spriteSheet,
+            (scaleFactor)*tileSize,
+            (sprite-scaleFactor),
+            tileSize,tileSize,
+            x * this.scaleX,
+            y * this.scaleY,
+            tileSize*this.scaleX,
+            tileSize*this.scaleY);            
     }
 
     setUpdate(update_function) {
