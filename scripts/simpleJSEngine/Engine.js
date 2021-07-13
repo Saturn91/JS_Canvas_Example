@@ -56,12 +56,14 @@ class Engine {
             inputFPS = GameEnvironement.graphics.fps;
         }
 
-        if(timestamp - GameEnvironement.internaly.lastUpdate >= 1000/(inputFPS)) {
+        //if(timestamp - GameEnvironement.internaly.lastUpdate >= 1000/(inputFPS)) {
+            if(true) {
             let timeDelta = timestamp - GameEnvironement.internaly.lastUpdate
     
             if(GameEnvironement.functions.update) GameEnvironement.functions.update(timeDelta)
+            GameEnvironement.internaly.canvas.bufferCtx.clearRect(0, 0, GameEnvironement.internaly.canvas.canvas.width, GameEnvironement.internaly.canvas.canvas.height);
             if(GameEnvironement.functions.draw) GameEnvironement.functions.draw(GameEnvironement.internaly.canvas)
-        
+            GameEnvironement.internaly.canvas.ctx.drawImage(GameEnvironement.internaly.canvas.bufferCanvas, 0, 0);
             GameEnvironement.internaly.lastUpdate = timestamp
 
             GameEnvironement.properties.actual_fps = ((GameEnvironement.properties.actual_fps-1) * 0.99 + 0.01 *  1000/timeDelta)+1; 

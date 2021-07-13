@@ -7,7 +7,9 @@ function is2Component(value) {
 class CanvasHandler {
     constructor(canvasID, windowWidth,  windowHeight) {
 
-        this.canvas = document.getElementById(canvasID);        
+        this.canvas = document.getElementById(canvasID); 
+        this.bufferCanvas = document.createElement("canvas");
+        this.bufferCtx = this.bufferCanvas.getContext("2d");       
         
         if(!is2Component(GameEnvironement.graphics.tileSize) || GameEnvironement.graphics.tileSize > 64) console.warn('Tile size should be [1,2,4,8,16,32 or 64!]: but is ' + GameEnvironement.graphics.tileSize)
 
@@ -54,6 +56,8 @@ class CanvasHandler {
         
         this.canvas.width = this.windowWidth;
         this.canvas.height = windowHeight;
+        this.bufferCanvas.width = this.canvas.width;
+        this.bufferCanvas.height = this.canvas.height;
     }
 
     setBackgroundColor(col) {
@@ -61,8 +65,8 @@ class CanvasHandler {
     }
 
     setColor(colorNum) {
-        this.ctx.fillStyle = Colors[colorNum].color;
-        this.ctx.strokeSytle = Colors[colorNum].color;
+        this.bufferCtx.fillStyle = Colors[colorNum].color;
+        this.bufferCtx.strokeSytle = Colors[colorNum].color;
     }
 
     cls() {
@@ -70,15 +74,14 @@ class CanvasHandler {
     }
 
     fillRect(x, y, w, h, col) {
-        this.ctx.fillStyle = Colors[col].color;
-        this.ctx.fillRect(x,y,w,h);
+        this.bufferCtx.fillStyle = Colors[col].color;
+        this.bufferCtx.fillRect(x,y,w,h);
     }
 
     drawSprite(sprite, x, y) {        
         let tileSize = GameEnvironement.graphics.tileSize; 
         let pos = this.getScaledPositionOnScreenInPixel(Math.round(x), Math.round(y));
-        console.log(pos.x, pos.y);
-        this.ctx.drawImage(this.spriteSheet,(sprite%(64/tileSize))*tileSize,(sprite-sprite%(64/tileSize)),tileSize,tileSize,pos.x,pos.y,tileSize*this.scaleX,tileSize*this.scaleY);            
+        this.bufferCtx.drawImage(this.spriteSheet,(sprite%(64/tileSize))*tileSize,(sprite-sprite%(64/tileSize)),tileSize,tileSize,pos.x,pos.y,tileSize*this.scaleX,tileSize*this.scaleY);            
     }
 
     getScaledPositionOnScreenInPixel(x, y){
