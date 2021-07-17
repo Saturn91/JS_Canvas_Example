@@ -15,7 +15,28 @@ function init() {
 }
 
 function UpdateGame(deltaTime) {
-    player.x += (deltaTime/1000) * player.speed;
+    let right = GameEnvironement.input.keysDown['right'];
+    let left = GameEnvironement.input.keysDown['left'];
+    if((right &! left) || (left &! right)) {
+        if(right) {
+            player.x += player.speed * deltaTime/1000;
+        }
+        if(left) {
+            player.x -= player.speed * deltaTime/1000;
+        }
+    }
+
+    let up = GameEnvironement.input.keysDown['up'];
+    let down = GameEnvironement.input.keysDown['down'];
+    if((up &! down) || (down &! up)) {
+        if(up) {
+            player.y -= player.speed * deltaTime/1000;
+        }
+        if(down) {
+            player.y += player.speed * deltaTime/1000;
+        }
+    }
+    
 }
 
 function DrawGame(canvasHandler) {
@@ -24,7 +45,7 @@ function DrawGame(canvasHandler) {
     canvasHandler.drawSprite(1, 64, 0);
     canvasHandler.drawSprite(1, 64.5, 8);
     canvasHandler.drawSprite(8, 64, 16);
-    canvasHandler.drawSprite(0, player.x,24);
+    canvasHandler.drawSprite(0, player.x, player.y);
     canvasHandler.drawText("fps: " + Math.round(GameEnvironement.properties.actual_fps), 2, 7, 1, 100)
 }
 

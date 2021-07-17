@@ -1,3 +1,5 @@
+
+
 const GameEnvironement = {
     gameName: "Saturn91-Engine",
     canvasID: 'canvasObject',
@@ -22,6 +24,20 @@ const GameEnvironement = {
         update: undefined,
         draw: undefined
     },  
+
+    input: {
+        keys: [
+            {name: 'up', keys: ['w', 'ArrowUp']},
+            {name: 'right', keys: ['d', 'ArrowRight']},
+            {name: 'down', keys: ['s', 'ArrowDown']},
+            {name: 'left', keys: ['a', 'ArrowLeft']},
+            {name: 'jump', keys: [' ', 'x']},
+            {name: 'fire', keys: ['c']}
+        ],
+        buttons: [{name: 'fire', leys: ['c']}],
+        keysUp: {},
+        keysDown: {}
+    },
 
     properties: {
         debug: false,
@@ -58,7 +74,7 @@ class Engine {
         if(GameEnvironement.graphics.fps < 60) {
             inputFPS = GameEnvironement.graphics.fps;
         }
-        
+
         if(timestamp - GameEnvironement.internaly.lastUpdate >= 1000/(inputFPS)) {
             let timeDelta = timestamp - GameEnvironement.internaly.lastUpdate
             if(GameEnvironement.functions.update) GameEnvironement.functions.update(timeDelta)
@@ -73,8 +89,9 @@ class Engine {
                 GameEnvironement.properties.last_fps_update = timestamp;
                 console.log("actual fps: " + Math.floor(GameEnvironement.properties.actual_fps) + " last timeDelta: " + Math.floor(timeDelta) + "ms");
             }
-        }  
+        }      
         
+        setControlsFalse();
         
         window.requestAnimationFrame(GameEnvironement.loop)
     }
@@ -82,6 +99,7 @@ class Engine {
     start() {        
         GameEnvironement.properties.actual_fps = GameEnvironement.graphics.fps;
         GameEnvironement.internaly.lastUpdate = 0
+        SetupControls();
         if(GameEnvironement.functions.init) GameEnvironement.functions.init();
         window.requestAnimationFrame(GameEnvironement.loop)
     }
@@ -100,6 +118,26 @@ class Engine {
             }            
             GameEnvironement.internaly.engine.start();
         }        
+    }
+}
+
+function setControlsFalse() {
+    for(let i = 0; i < GameEnvironement.input.keys.length; i++) {
+        GameEnvironement.input.keysDown[GameEnvironement.input.keys[i].name] = false;
+    }
+}
+
+function SetupControls() {
+    for(let i = 0; i < GameEnvironement.input.keys.length; i++) {
+        let key =  GameEnvironement.input.keys[i];
+        document.addEventListener('keydown', (event) => {
+            for(let j = 0; j < key.keys.length; j++) {
+                keyCode = key.keys[j];
+                if( event.key === keyCode) {
+                    GameEnvironement.input.keysDown[key.name] = true;
+                }
+            }                               
+        });              
     }
 }
 
