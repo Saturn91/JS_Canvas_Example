@@ -36,6 +36,7 @@ const GameEnvironement = {
         ],
         buttons: [{name: 'fire', leys: ['c']}],
         keysUp: {},
+        keyMap: {},
         keysDown: {}
     },
 
@@ -91,7 +92,7 @@ class Engine {
             }
         }      
         
-        setControlsFalse();
+        updateControls();
         
         window.requestAnimationFrame(GameEnvironement.loop)
     }
@@ -121,24 +122,29 @@ class Engine {
     }
 }
 
-function setControlsFalse() {
+function updateControls() {
     for(let i = 0; i < GameEnvironement.input.keys.length; i++) {
-        GameEnvironement.input.keysDown[GameEnvironement.input.keys[i].name] = false;
+        let value = false;
+        for(let j = 0; j < GameEnvironement.input.keys[i].keys.length; j++) {
+            value = GameEnvironement.input.keyMap[GameEnvironement.input.keys[i].keys[j]] || value;
+        }
+        GameEnvironement.input.keysDown[GameEnvironement.input.keys[i].name] = value;
     }
 }
 
+onkeydown = onkeyup = function(e){
+    GameEnvironement.input.keyMap[e.key] = e.type == 'keydown';
+}
+
 function SetupControls() {
-    for(let i = 0; i < GameEnvironement.input.keys.length; i++) {
-        let key =  GameEnvironement.input.keys[i];
-        document.addEventListener('keydown', (event) => {
-            for(let j = 0; j < key.keys.length; j++) {
-                keyCode = key.keys[j];
-                if( event.key === keyCode) {
-                    GameEnvironement.input.keysDown[key.name] = true;
-                }
-            }                               
-        });              
-    }
+    
+    document.addEventListener('keydown', (e) => {
+        onkeydown(e);
+    });
+
+    document.addEventListener('keyup', (e) => {
+        onkeyup(e);
+    });
 }
 
 function debug(msg, component, type) {
