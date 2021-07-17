@@ -1,5 +1,5 @@
 const GameEnvironement = {
-    name: "myGame",
+    gameName: "Saturn91-Engine",
     canvasID: 'canvasObject',
 
     initialized: {
@@ -20,7 +20,7 @@ const GameEnvironement = {
     functions: {
         init: undefined,
         update: undefined,
-        draw: undefined  
+        draw: undefined
     },  
 
     properties: {
@@ -46,6 +46,9 @@ class Engine {
             console.warn('60 fps is the maximal value possible [' + GameEnvironement.graphics.fps + "] gets clamped to 60!");
         }
         setTimeout(this.waitForInitialization(), 100);
+
+        document.getElementById('game-name').innerText = GameEnvironement.gameName;
+        document.title = GameEnvironement.gameName;
 
         GameEnvironement.internaly.engine = this;
     }
@@ -120,4 +123,6 @@ function debug(msg, component, type) {
         return
     }
 }
+
+
   
