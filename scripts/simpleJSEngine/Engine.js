@@ -34,7 +34,7 @@ const GameEnvironement = {
             {name: 'jump', keys: [' ', 'x']},
             {name: 'fire', keys: ['c']}
         ],
-        buttons: [{name: 'fire', leys: ['c']}],
+        buttons: [{name: 'fire', keys: ['c']}],
         keysUp: {},
         keyMap: {},
         keysDown: {}
@@ -124,11 +124,13 @@ class Engine {
 
 function updateControls() {
     for(let i = 0; i < GameEnvironement.input.keys.length; i++) {
+        let oldValue = GameEnvironement.input.keysDown[GameEnvironement.input.keys[i].name];
         let value = false;
         for(let j = 0; j < GameEnvironement.input.keys[i].keys.length; j++) {
             value = GameEnvironement.input.keyMap[GameEnvironement.input.keys[i].keys[j]] || value;
         }
         GameEnvironement.input.keysDown[GameEnvironement.input.keys[i].name] = value;
+        oldValue &! value ? GameEnvironement.input.keysUp[GameEnvironement.input.keys[i].name] = true: GameEnvironement.input.keysUp[GameEnvironement.input.keys[i].name] = false;
     }
 }
 

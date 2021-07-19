@@ -36,6 +36,10 @@ function UpdateGame(deltaTime) {
             player.y += player.speed * deltaTime/1000;
         }
     }
+
+    if(GameEnvironement.input.keysUp['jump']) {
+        console.log('jump!');
+    }
     
 }
 
