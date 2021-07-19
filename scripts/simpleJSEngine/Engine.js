@@ -26,7 +26,7 @@ const GameEnvironement = {
     },  
 
     input: {
-        keys: [
+        cmdsOnKeys: [
             {name: 'up', keys: ['w', 'ArrowUp']},
             {name: 'right', keys: ['d', 'ArrowRight']},
             {name: 'down', keys: ['s', 'ArrowDown']},
@@ -34,10 +34,9 @@ const GameEnvironement = {
             {name: 'jump', keys: [' ', 'x']},
             {name: 'fire', keys: ['c']}
         ],
-        buttons: [{name: 'fire', keys: ['c']}],
-        keysUp: {},
+        cmdsUp: {},
         keyMap: {},
-        keysDown: {}
+        cmdDown: {}
     },
 
     properties: {
@@ -123,14 +122,14 @@ class Engine {
 }
 
 function updateControls() {
-    for(let i = 0; i < GameEnvironement.input.keys.length; i++) {
-        let oldValue = GameEnvironement.input.keysDown[GameEnvironement.input.keys[i].name];
+    for(let i = 0; i < GameEnvironement.input.cmdsOnKeys.length; i++) {
+        let oldValue = GameEnvironement.input.cmdDown[GameEnvironement.input.cmdsOnKeys[i].name];
         let value = false;
-        for(let j = 0; j < GameEnvironement.input.keys[i].keys.length; j++) {
-            value = GameEnvironement.input.keyMap[GameEnvironement.input.keys[i].keys[j]] || value;
+        for(let j = 0; j < GameEnvironement.input.cmdsOnKeys[i].keys.length; j++) {
+            value = GameEnvironement.input.keyMap[GameEnvironement.input.cmdsOnKeys[i].keys[j]] || value;
         }
-        GameEnvironement.input.keysDown[GameEnvironement.input.keys[i].name] = value;
-        oldValue &! value ? GameEnvironement.input.keysUp[GameEnvironement.input.keys[i].name] = true: GameEnvironement.input.keysUp[GameEnvironement.input.keys[i].name] = false;
+        GameEnvironement.input.cmdDown[GameEnvironement.input.cmdsOnKeys[i].name] = value;
+        oldValue &! value ? GameEnvironement.input.cmdsUp[GameEnvironement.input.cmdsOnKeys[i].name] = true: GameEnvironement.input.cmdsUp[GameEnvironement.input.cmdsOnKeys[i].name] = false;
     }
 }
 
@@ -170,5 +169,49 @@ function debug(msg, component, type) {
     }
 }
 
+function clearAllCMS() {
+    GameEnvironement.input.cmdsOnKeys = [];
+}
 
-  
+function AddCMD(cmdName, keyCodes) {
+    let cmd = undefined;
+    for(let i = 0; i < GameEnvironement.input.cmdsOnKeys.length; i++) {
+        if(GameEnvironement.input.cmdsOnKeys[i]. name === cmdName) {
+            cmd = GameEnvironement.input.cmdsOnKeys[i];
+            break;
+        }
+    }
+
+    if(!cmd) {
+        GameEnvironement.input.cmdsOnKeys.push({name: cmdName, keys: keyCodes});
+    } else {
+        for(let i = 0; i < keyCodes.length; i++) {
+            let exists = false;
+            for(let j = 0; j < cmd.keys.length; j++) {
+                if(cmd.keys[j] === keyCodes[i]) {
+                    exists = true;
+                    console.warn('cmd: ' + cmd.keys[j] + ' does already exist in ' + cmd.name);
+                    break;
+                }
+            }
+
+            if(!exists) GameEnvironement.input.cmdsOnKeys.push(keyCodes[i]);
+        }
+    }
+}
+
+function RemCMD(cmdName) {
+    for(let i = 0; i < GameEnvironement.input.cmdsOnKeys.length; i++) {
+        if(GameEnvironement.input.cmdsOnKeys[i].name === cmdName) {
+            GameEnvironement.input.cmdsOnKeys.splice(i,1);
+            return;
+        }
+    }
+    let definedCMDs = '[';
+    for(let i = 0; i < GameEnvironement.input.cmdsOnKeys.length; i++) {
+        definedCMDs += GameEnvironement.input.cmdsOnKeys[i].name + ','
+    }
+    definedCMDs += ']';
+
+    console.error('cmd: ' + cmdName + ' does not exist, or was already removed... defined cmds: ' + definedCMDs);
+}

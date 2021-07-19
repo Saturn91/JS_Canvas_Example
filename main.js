@@ -11,12 +11,16 @@ let player;
 
 function init() {
     player = new Player();
-    debug("test", "init()");
+    RemCMD('green');
+    RemCMD('up');
+    //clearAllCMS();
+    AddCMD('up', ['w', 'ArrowUp']);
+
 }
 
 function UpdateGame(deltaTime) {
-    let right = GameEnvironement.input.keysDown['right'];
-    let left = GameEnvironement.input.keysDown['left'];
+    let right = GameEnvironement.input.cmdDown['right'];
+    let left = GameEnvironement.input.cmdDown['left'];
     if((right &! left) || (left &! right)) {
         if(right) {
             player.x += player.speed * deltaTime/1000;
@@ -26,8 +30,8 @@ function UpdateGame(deltaTime) {
         }
     }
 
-    let up = GameEnvironement.input.keysDown['up'];
-    let down = GameEnvironement.input.keysDown['down'];
+    let up = GameEnvironement.input.cmdDown['up'];
+    let down = GameEnvironement.input.cmdDown['down'];
     if((up &! down) || (down &! up)) {
         if(up) {
             player.y -= player.speed * deltaTime/1000;
@@ -37,7 +41,7 @@ function UpdateGame(deltaTime) {
         }
     }
 
-    if(GameEnvironement.input.keysUp['jump']) {
+    if(GameEnvironement.input.cmdsUp['jump']) {
         console.log('jump!');
     }
     
