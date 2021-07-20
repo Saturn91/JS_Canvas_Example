@@ -1,8 +1,8 @@
 //Example ussage
 class Player {
     constructor() {
-        this.x = 10;
-        this.y = 10;
+        this.x = GameEnvironement.graphics.resolutionX/2 - 4;
+        this.y = GameEnvironement.graphics.resolutionY/2 - 4;
         this.w = 8;
         this.h = 8;
         this.speed = 40;
@@ -13,8 +13,8 @@ class Player {
 
 class Coin {
     constructor() {
-        this.x = 10;
-        this.y = 10;
+        this.x = 0;
+        this.y = 0;
         this.w = 8;
         this.h = 8;
         this.sprite = 1;
