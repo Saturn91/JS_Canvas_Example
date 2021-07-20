@@ -6,7 +6,7 @@ class Player {
         this.w = 8;
         this.h = 8;
         this.speed = 40;
-        this.sprite = 0;
+        this.sprite = 4;
         this.score = 0;
     }
 }
@@ -17,9 +17,18 @@ class Coin {
         this.y = 0;
         this.w = 8;
         this.h = 8;
-        this.sprite = 1;
+        this.sprite = 7;
     }
 }
+
+const map = [
+    [0, 1, 1, 2, 1, 1, 3],
+    [8,-1,-1,-1,-1,-1,11],
+    [8,-1,-1,-1,-1,-1,11],
+    [8,-1,-1,-1,-1,-1,11],
+    [8,-1,-1,-1,-1,-1,11],
+    [16, 1, 1, 1, 1, 1,19]
+]
 
 let player;
 let coin;
@@ -32,6 +41,7 @@ function spanCoin() {
 function init() {
     player = new Player();
     coin = new Coin();
+    engine.setMap('main-map', map);
     spanCoin();
 }
 
@@ -79,7 +89,7 @@ function drawObject(canvasHandler, object) {
 
 function DrawGame(canvasHandler) {
     canvasHandler.cls();
-    
+    canvasHandler.drawMap('main-map', 0, 0);
     drawObject(canvasHandler, player);
     drawObject(canvasHandler, coin);
     canvasHandler.drawText("fps: " + Math.round(GameEnvironement.properties.actual_fps), 2, 7, 1, 100)
@@ -90,10 +100,6 @@ GameEnvironement.gameName = 'Saturn91 - coin Collector';
 GameEnvironement.functions.update = UpdateGame;
 GameEnvironement.functions.draw = DrawGame;
 GameEnvironement.functions.init = init;
-
 GameEnvironement.graphics.pixelPerfect = false;
-
 GameEnvironement.graphics.fps = 60;
-
 const engine = new Engine();
-

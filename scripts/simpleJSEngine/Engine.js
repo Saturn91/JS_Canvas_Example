@@ -17,7 +17,8 @@ const GameEnvironement = {
         fps: 60,
         tileSize: 8,
         clearColor: 0,
-        pixelPerfect: false
+        pixelPerfect: false,
+        maps: {}
     },  
 
     functions: {
@@ -119,6 +120,10 @@ class Engine {
             }            
             GameEnvironement.internaly.engine.start();
         }        
+    }
+
+    setMap(mapName, mapData) {
+        GameEnvironement.internaly.canvas.loadMapAsResource(mapName, mapData);
     }
 }
 
