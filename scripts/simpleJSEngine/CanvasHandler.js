@@ -50,9 +50,16 @@ class CanvasHandler {
         GameEnvironement.internaly.canvas.spriteSheet.height = 64;
 
         this.loadOriginalSpriteSheet.onload = () => {
+            /*
+            The following code imports the original spritesheet and adds a 2 pixel gap between the different sprites.
+            this gap gets filled with the pixels on the border of the original sprites.
+            (you can check the result by calling: canvasHandler.ctx.drawImage(canvasHandler.spriteSheet,0,0); ),
+            without this it can happen that a small portion of the neibouring tile's pixel appear as a line on the border of a drawn sprite, by adding the
+            equally collorized gap this "line" has the same color as the sprite itself, which hides this side effect completly            
+            */
             this.spriteSheet = document.createElement('img');
             let canvas = document.createElement('canvas');
-            
+
             let tileNum = 64 / GameEnvironement.graphics.tileSize;
             
             canvas.width = 64 + (tileNum-1)*2 + 2;
@@ -60,19 +67,75 @@ class CanvasHandler {
 
             let spriteSheetCTX = canvas.getContext('2d');
 
-            let tileSize = GameEnvironement.graphics.tileSize;    
-
+            let tileSize = GameEnvironement.graphics.tileSize; 
+               
             for(let x = 0; x < 64 / tileNum; x++) {
                 for(let y = 0; y < 64 / tileNum; y++) {
                     let scaleFactor = (x+y*tileSize)%(64/tileSize);
+                    
+                    let posInSheetx = (scaleFactor)*tileSize;
+                    let posInSheety = ((x+y*tileSize)-scaleFactor);
+
+                    let posXOnCanvas = x*(tileSize+2)+1;
+                    let posYOnCanvas = y*(tileSize+2)+1;
+
+                    //left
                     spriteSheetCTX.drawImage(
                         this.loadOriginalSpriteSheet,
-                        (scaleFactor)*tileSize,
-                        ((x+y*tileSize)-scaleFactor),
+                        posInSheetx,
+                        posInSheety,
+                        1,
+                        tileSize,
+                        posXOnCanvas-1,
+                        posYOnCanvas,
+                        1,
+                        tileSize);
+                    
+                    //right
+                    spriteSheetCTX.drawImage(
+                        this.loadOriginalSpriteSheet,
+                        posInSheetx+tileSize-1,
+                        posInSheety,
+                        1,
+                        tileSize,
+                        posXOnCanvas+tileSize,
+                        posYOnCanvas,
+                        1,
+                        tileSize);
+
+                    //top
+                    spriteSheetCTX.drawImage(
+                        this.loadOriginalSpriteSheet,
+                        posInSheetx,
+                        posInSheety,
+                        tileSize,
+                        1,
+                        posXOnCanvas,
+                        posYOnCanvas-1,
+                        tileSize,
+                        1);
+
+                     //down
+                     spriteSheetCTX.drawImage(
+                        this.loadOriginalSpriteSheet,
+                        posInSheetx,
+                        posInSheety+tileSize-1,
+                        tileSize,
+                        1,
+                        posXOnCanvas,
+                        posYOnCanvas+tileSize,
+                        tileSize,
+                        1);
+                    
+                    //draw original
+                    spriteSheetCTX.drawImage(
+                        this.loadOriginalSpriteSheet,
+                        posInSheetx,
+                        posInSheety,
                         tileSize,
                         tileSize,
-                        x*(tileSize+2)+1,
-                        y*(tileSize+2)+1,
+                        posXOnCanvas,
+                        posYOnCanvas,
                         tileSize,
                         tileSize);
                 }
@@ -125,8 +188,8 @@ class CanvasHandler {
 
         this.ctx.drawImage(
             this.spriteSheet,
-            (scaleFactor)*tileSize,
-            (sprite-scaleFactor),
+            (scaleFactor)*(tileSize+2)+1,
+            (sprite-scaleFactor)*(tileSize+2)+1,
             tileSize,
             tileSize,
             xPos,
