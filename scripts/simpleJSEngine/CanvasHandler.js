@@ -36,7 +36,6 @@ class CanvasHandler {
         GameEnvironement.internaly.canvas = this;
         GameEnvironement.internaly.canvas.loadResources(() => {
             GameEnvironement.initialized.canvas = true;
-            console.log('yop!');
         })
     }
 
@@ -46,13 +45,14 @@ class CanvasHandler {
 
     loadSpriteSheet(callBack) {  
         
-        GameEnvironement.internaly.canvas.spriteSheet = document.createElement('img');
-        //GameEnvironement.internaly.canvas.loadOriginalSpriteSheet.crossOrigin = "Anonymous";
-        this.loadOriginalSpriteSheet.onload = () => {
-            
+        GameEnvironement.internaly.canvas.spriteSheet = new Image();
+        GameEnvironement.internaly.canvas.spriteSheet.width = 64;
+        GameEnvironement.internaly.canvas.spriteSheet.height = 64;
 
+        this.loadOriginalSpriteSheet.onload = () => {
             this.spriteSheet = document.createElement('img');
             let canvas = document.createElement('canvas');
+            
             let tileNum = 64 / GameEnvironement.graphics.tileSize;
             
             canvas.width = 64 + (tileNum-1)*2 + 2;
@@ -60,12 +60,9 @@ class CanvasHandler {
 
             let spriteSheetCTX = canvas.getContext('2d');
 
-            let tileSize = GameEnvironement.graphics.tileSize; 
+            let tileSize = GameEnvironement.graphics.tileSize;    
 
-            spriteSheetCTX.fillStyle = '#f00';
-            spriteSheetCTX.fillRect(0,0,64,64);
-            //spriteSheetCTX.drawImage(GameEnvironement.internaly.canvas.loadOriginalSpriteSheet, 0, 0);
-            /*for(let x = 0; x < 64 / tileNum; x++) {
+            for(let x = 0; x < 64 / tileNum; x++) {
                 for(let y = 0; y < 64 / tileNum; y++) {
                     let scaleFactor = (x+y*tileSize)%(64/tileSize);
                     spriteSheetCTX.drawImage(
@@ -79,9 +76,9 @@ class CanvasHandler {
                         tileSize,
                         tileSize);
                 }
-            }*/
+            }
 
-            GameEnvironement.internaly.canvas.spriteSheet.src = canvas.toDataURL();
+            GameEnvironement.internaly.canvas.spriteSheet = canvas;
             callBack();
         }   
         
