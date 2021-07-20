@@ -50,13 +50,17 @@ function DrawGame(canvasHandler) {
     canvasHandler.drawSprite(8, 64, 16);
     canvasHandler.drawSprite(0, player.x, player.y);
     canvasHandler.drawText("fps: " + Math.round(GameEnvironement.properties.actual_fps), 2, 7, 1, 100)
+
+    canvasHandler.ctx.drawImage(
+        canvasHandler.spriteSheet,
+        10, 10); 
 }
 
 GameEnvironement.functions.update = UpdateGame;
 GameEnvironement.functions.draw = DrawGame;
 GameEnvironement.functions.init = init;
 
-GameEnvironement.graphics.pixelPerfect = true;
+GameEnvironement.graphics.pixelPerfect = false;
 
 GameEnvironement.graphics.fps = 60;
 
