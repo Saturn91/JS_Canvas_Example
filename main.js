@@ -11,11 +11,6 @@ let player;
 
 function init() {
     player = new Player();
-    RemCMD('green');
-    RemCMD('up');
-    //clearAllCMS();
-    AddCMD('up', ['w', 'ArrowUp']);
-
 }
 
 function UpdateGame(deltaTime) {
@@ -60,6 +55,8 @@ function DrawGame(canvasHandler) {
 GameEnvironement.functions.update = UpdateGame;
 GameEnvironement.functions.draw = DrawGame;
 GameEnvironement.functions.init = init;
+
+GameEnvironement.graphics.pixelPerfect = true;
 
 GameEnvironement.graphics.fps = 60;
 

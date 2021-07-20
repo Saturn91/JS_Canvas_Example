@@ -73,14 +73,23 @@ class CanvasHandler {
     drawSprite(sprite, x, y) {        
         let tileSize = GameEnvironement.graphics.tileSize; 
         let scaleFactor = sprite%(64/tileSize);
+
+        let xPos = x;
+        let yPos = y;
+
+        if(GameEnvironement.graphics.pixelPerfect) {
+            xPos = Math.round(x);
+            yPos = Math.round(y)
+        }
+
         this.ctx.drawImage(
             this.spriteSheet,
             (scaleFactor)*tileSize,
             (sprite-scaleFactor),
             tileSize,
             tileSize,
-            Math.round(x),
-            Math.round(y),
+            xPos,
+            yPos,
             tileSize,
             tileSize);            
     }

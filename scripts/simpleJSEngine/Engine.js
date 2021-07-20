@@ -16,7 +16,8 @@ const GameEnvironement = {
         resolutionY: 128,
         fps: 60,
         tileSize: 8,
-        clearColor: 0
+        clearColor: 0,
+        pixelPerfect: false
     },  
 
     functions: {
