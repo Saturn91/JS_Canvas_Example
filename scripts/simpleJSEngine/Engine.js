@@ -12,6 +12,7 @@ const GameEnvironement = {
     graphics: {
         windowWidth: 640,
         windowHeight: 512,
+        autoFitScreen: false,
         resolutionX: 160,
         resolutionY: 128,
         fps: 60,

@@ -102,4 +102,6 @@ GameEnvironement.functions.draw = DrawGame;
 GameEnvironement.functions.init = init;
 GameEnvironement.graphics.pixelPerfect = false;
 GameEnvironement.graphics.fps = 60;
+GameEnvironement.graphics.autoFitScreen = true;
+
 const engine = new Engine();

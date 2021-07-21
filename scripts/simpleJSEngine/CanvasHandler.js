@@ -8,23 +8,14 @@ class CanvasHandler {
     constructor(canvasID, windowWidth,  windowHeight) {
 
         this.canvas = document.getElementById(canvasID);        
-        
-        if(!is2Component(GameEnvironement.graphics.tileSize) || GameEnvironement.graphics.tileSize > 64) console.warn('Tile size should be [1,2,4,8,16,32 or 64!]: but is ' + GameEnvironement.graphics.tileSize)
-
-        if(GameEnvironement.graphics.windowWidth == undefined) { GameEnvironement.graphics.windowWidth = window.innerWidth-4 }
-        if(GameEnvironement.graphics.windowHeight == undefined) { GameEnvironement.graphics.windowHeight = window.innerHeight-4 }
-
-        if(Math.abs(GameEnvironement.graphics.windowWidth / GameEnvironement.graphics.resolutionX-GameEnvironement.graphics.windowHeight / GameEnvironement.graphics.resolutionY) > 0.01) {
-            console.warn('resolutionX / windowWithd should be the same value as resolutionY / windowHeight! elswhise the image gets stretched!')
-        }
-
-        this.setCanvasSize(GameEnvironement.graphics.windowWidth,GameEnvironement.graphics.windowHeight)
 
         this.ctx = this.canvas.getContext('2d');
-        this.ctx.imageSmoothingEnabled = false;
-        this.ctx.font = '6px serif';
 
-        this.ctx.scale(GameEnvironement.graphics.windowWidth / GameEnvironement.graphics.resolutionX, GameEnvironement.graphics.windowHeight / GameEnvironement.graphics.resolutionY)
+        window.addEventListener('resize', () => {
+            this.resizeCanvas(this);
+        });
+        
+        this.resizeCanvas(this);
 
         this.setBackgroundColor(GameEnvironement.graphics.clearColor);
         
@@ -37,6 +28,35 @@ class CanvasHandler {
         GameEnvironement.internaly.canvas.loadResources(() => {
             GameEnvironement.initialized.canvas = true;
         })
+    }
+
+    resizeCanvas(canvas) {
+        console.log('resize Canvas!');
+        if(!is2Component(GameEnvironement.graphics.tileSize) || GameEnvironement.graphics.tileSize > 64) console.warn('Tile size should be [1,2,4,8,16,32 or 64!]: but is ' + GameEnvironement.graphics.tileSize)
+
+        if(GameEnvironement.graphics.windowWidth == undefined) { GameEnvironement.graphics.windowWidth = window.innerWidth-4 }
+        if(GameEnvironement.graphics.windowHeight == undefined) { GameEnvironement.graphics.windowHeight = window.innerHeight-4 }
+
+        if(GameEnvironement.graphics.autoFitScreen) {
+            if (window.innerWidth > window.innerHeight) {
+                let scale = Math.round((window.innerHeight-200)/GameEnvironement.graphics.resolutionY);
+                GameEnvironement.graphics.windowHeight = scale * GameEnvironement.graphics.resolutionY
+                GameEnvironement.graphics.windowWidth = scale * GameEnvironement.graphics.resolutionX
+            } else {
+                let scale = Math.round((window.innerWidth-50)/GameEnvironement.graphics.resolutionX);
+                GameEnvironement.graphics.windowHeight = scale * GameEnvironement.graphics.resolutionY
+                GameEnvironement.graphics.windowWidth = scale * GameEnvironement.graphics.resolutionX
+            }
+        }
+
+        if(Math.abs(GameEnvironement.graphics.windowWidth / GameEnvironement.graphics.resolutionX-GameEnvironement.graphics.windowHeight / GameEnvironement.graphics.resolutionY) > 0.01) {
+            console.warn('resolutionX / windowWithd should be the same value as resolutionY / windowHeight! elswhise the image gets stretched!')
+        }
+
+        canvas.setCanvasSize(GameEnvironement.graphics.windowWidth,GameEnvironement.graphics.windowHeight);
+        canvas.ctx.scale(GameEnvironement.graphics.windowWidth / GameEnvironement.graphics.resolutionX, GameEnvironement.graphics.windowHeight / GameEnvironement.graphics.resolutionY)
+        canvas.ctx.imageSmoothingEnabled = false;
+        canvas.ctx.font = '6px serif';
     }
 
     loadResources(callBack) {   
