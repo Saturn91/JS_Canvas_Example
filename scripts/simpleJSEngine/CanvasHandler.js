@@ -63,109 +63,114 @@ class CanvasHandler {
     }
 
     loadSpriteSheet(callBack) {  
-        
-        GameEnvironement.internaly.canvas.spriteSheet = new Image();
-
-        this.loadOriginalSpriteSheet.onload = () => {
-            /*
-            The following code imports the original spritesheet and adds a 2 pixel gap between the different sprites.
-            this gap gets filled with the pixels on the border of the original sprites.
-            (you can check the result by calling: canvasHandler.ctx.drawImage(canvasHandler.spriteSheet,0,0); ),
-            without this it can happen that a small portion of the neibouring tile's pixel appear as a line on the border of a drawn sprite, by adding the
-            equally collorized gap this "line" has the same color as the sprite itself, which hides this side effect completly            
-            */
-            this.spriteSheet = document.createElement('img');
-            let canvas = document.createElement('canvas');
-
-            let tileNum = 64 / GameEnvironement.graphics.tileSize;
-            
-            canvas.width = 64 + (tileNum-1)*2 + 2;
-            canvas.height = 64 + (tileNum-1)*2 + 2;
-
-            let spriteSheetCTX = canvas.getContext('2d');
-
-            let tileSize = GameEnvironement.graphics.tileSize; 
-               
-            for(let x = 0; x < 64 / tileNum; x++) {
-                for(let y = 0; y < 64 / tileNum; y++) {
-                    let scaleFactor = (x+y*tileSize)%(64/tileSize);
-                    
-                    let posInSheetx = (scaleFactor)*tileSize;
-                    let posInSheety = ((x+y*tileSize)-scaleFactor);
-
-                    let posXOnCanvas = x*(tileSize+2)+1;
-                    let posYOnCanvas = y*(tileSize+2)+1;
-
-                    //left
-                    spriteSheetCTX.drawImage(
-                        this.loadOriginalSpriteSheet,
-                        posInSheetx,
-                        posInSheety,
-                        1,
-                        tileSize,
-                        posXOnCanvas-1,
-                        posYOnCanvas,
-                        1,
-                        tileSize);
-                    
-                    //right
-                    spriteSheetCTX.drawImage(
-                        this.loadOriginalSpriteSheet,
-                        posInSheetx+tileSize-1,
-                        posInSheety,
-                        1,
-                        tileSize,
-                        posXOnCanvas+tileSize,
-                        posYOnCanvas,
-                        1,
-                        tileSize);
-
-                    //top
-                    spriteSheetCTX.drawImage(
-                        this.loadOriginalSpriteSheet,
-                        posInSheetx,
-                        posInSheety,
-                        tileSize,
-                        1,
-                        posXOnCanvas,
-                        posYOnCanvas-1,
-                        tileSize,
-                        1);
-
-                     //down
-                     spriteSheetCTX.drawImage(
-                        this.loadOriginalSpriteSheet,
-                        posInSheetx,
-                        posInSheety+tileSize-1,
-                        tileSize,
-                        1,
-                        posXOnCanvas,
-                        posYOnCanvas+tileSize,
-                        tileSize,
-                        1);
-                    
-                    //draw original
-                    spriteSheetCTX.drawImage(
-                        this.loadOriginalSpriteSheet,
-                        posInSheetx,
-                        posInSheety,
-                        tileSize,
-                        tileSize,
-                        posXOnCanvas,
-                        posYOnCanvas,
-                        tileSize,
-                        tileSize);
+        GameEnvironement.graphics.ready = GameEnvironement.graphics.spriteSheetNames.length;
+        for(let i = 0; i < GameEnvironement.graphics.spriteSheetNames.length; i++) {
+            let currentID = GameEnvironement.graphics.spriteSheetNames[i];
+            GameEnvironement.graphics.spriteSheets[currentID].data.original = new Image();
+            GameEnvironement.graphics.spriteSheets[currentID].data.original.onload = () => {
+                /*
+                The following code imports the original spritesheet and adds a 2 pixel gap between the different sprites.
+                this gap gets filled with the pixels on the border of the original sprites.
+                (you can check the result by calling: canvasHandler.ctx.drawImage(canvasHandler.spriteSheet,0,0); ),
+                without this it can happen that a small portion of the neibouring tile's pixel appear as a line on the border of a drawn sprite, by adding the
+                equally collorized gap this "line" has the same color as the sprite itself, which hides this side effect completly            
+                */
+                this.spriteSheet = document.createElement('img');
+                let canvas = document.createElement('canvas');
+    
+                let tileNum = 64 / GameEnvironement.graphics.tileSize;
+                
+                canvas.width = 64 + (tileNum-1)*2 + 2;
+                canvas.height = 64 + (tileNum-1)*2 + 2;
+    
+                let spriteSheetCTX = canvas.getContext('2d');
+    
+                let tileSize = GameEnvironement.graphics.tileSize; 
+                   
+                for(let x = 0; x < 64 / tileNum; x++) {
+                    for(let y = 0; y < 64 / tileNum; y++) {
+                        let scaleFactor = (x+y*tileSize)%(64/tileSize);
+                        
+                        let posInSheetx = (scaleFactor)*tileSize;
+                        let posInSheety = ((x+y*tileSize)-scaleFactor);
+    
+                        let posXOnCanvas = x*(tileSize+2)+1;
+                        let posYOnCanvas = y*(tileSize+2)+1;
+    
+                        //left
+                        spriteSheetCTX.drawImage(
+                            GameEnvironement.graphics.spriteSheets[currentID].data.original,
+                            posInSheetx,
+                            posInSheety,
+                            1,
+                            tileSize,
+                            posXOnCanvas-1,
+                            posYOnCanvas,
+                            1,
+                            tileSize);
+                        
+                        //right
+                        spriteSheetCTX.drawImage(
+                            GameEnvironement.graphics.spriteSheets[currentID].data.original,
+                            posInSheetx+tileSize-1,
+                            posInSheety,
+                            1,
+                            tileSize,
+                            posXOnCanvas+tileSize,
+                            posYOnCanvas,
+                            1,
+                            tileSize);
+    
+                        //top
+                        spriteSheetCTX.drawImage(
+                            GameEnvironement.graphics.spriteSheets[currentID].data.original,
+                            posInSheetx,
+                            posInSheety,
+                            tileSize,
+                            1,
+                            posXOnCanvas,
+                            posYOnCanvas-1,
+                            tileSize,
+                            1);
+    
+                         //down
+                         spriteSheetCTX.drawImage(
+                            GameEnvironement.graphics.spriteSheets[currentID].data.original,
+                            posInSheetx,
+                            posInSheety+tileSize-1,
+                            tileSize,
+                            1,
+                            posXOnCanvas,
+                            posYOnCanvas+tileSize,
+                            tileSize,
+                            1);
+                        
+                        //draw original
+                        spriteSheetCTX.drawImage(
+                            GameEnvironement.graphics.spriteSheets[currentID].data.original,
+                            posInSheetx,
+                            posInSheety,
+                            tileSize,
+                            tileSize,
+                            posXOnCanvas,
+                            posYOnCanvas,
+                            tileSize,
+                            tileSize);
+                    }
+                }
+    
+                GameEnvironement.graphics.spriteSheets[currentID].data.spriteSheet = canvas;
+                GameEnvironement.graphics.ready --;
+                if(GameEnvironement.graphics.ready <= 0) {
+                    callBack();
                 }
             }
 
-            GameEnvironement.internaly.canvas.spriteSheet = canvas;
-            callBack();
-        }   
-        
-        this.loadOriginalSpriteSheet.src = './assets/spriteSheet.png'; 
+            GameEnvironement.graphics.spriteSheets[currentID].data.original.src = GameEnvironement.graphics.spriteSheets[currentID].path;
+        }
     }
 
-    loadMapAsResource(name, mapData) {
+    loadMapAsResource(name, mapData, spriteSheetName) {
         let mapCanvas = document.createElement('canvas');
 
         mapCanvas.width = mapData[0].length*GameEnvironement.graphics.tileSize;
@@ -175,10 +180,9 @@ class CanvasHandler {
         
         for(let x = 0; x < mapData[0].length; x++) {
             for( let y = 0; y < mapData.length; y++) {
-                if (mapData[y][x] >= 0) {
-                    let spriteData = this.getSpriteData(mapData[y][x]);
-                    
-                    this.drawSpriteOnContext(mapContext, this.getSpriteData(mapData[y][x]), x*GameEnvironement.graphics.tileSize, y*GameEnvironement.graphics.tileSize);
+                console.log('yop!');
+                if (mapData[y][x] >= 0) {                    
+                    this.drawSpriteOnContext(mapContext, spriteSheetName, this.getSpriteData(mapData[y][x]), x*GameEnvironement.graphics.tileSize, y*GameEnvironement.graphics.tileSize);
                 }             
             }
         }
@@ -212,7 +216,7 @@ class CanvasHandler {
         this.ctx.fillRect(Math.round(x),Math.round(y),w,h);
     }
 
-    drawSprite(sprite, x, y) { 
+    drawSprite(sprite, spriteSheetName, x, y) { 
         
         let xPos = x;
         let yPos = y;
@@ -222,12 +226,12 @@ class CanvasHandler {
             yPos = Math.round(y)
         }
 
-        this.drawSpriteOnContext(this.ctx, this.getSpriteData(sprite), xPos, yPos);
+        this.drawSpriteOnContext(this.ctx, spriteSheetName, this.getSpriteData(sprite), xPos, yPos);
     }
 
-    drawSpriteOnContext(context, spriteData, x, y) {
+    drawSpriteOnContext(context, spriteSheetName, spriteData, x, y) {
         context.drawImage(
-            this.spriteSheet,
+            GameEnvironement.graphics.spriteSheets[spriteSheetName].data.spriteSheet,
             spriteData.spriteOffX,
             spriteData.spriteOffY,
             spriteData.tileSize,

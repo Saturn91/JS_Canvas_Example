@@ -1,5 +1,3 @@
-
-
 const GameEnvironement = {
     gameName: "Saturn91-Engine",
     canvasID: 'canvasObject',
@@ -19,7 +17,8 @@ const GameEnvironement = {
         tileSize: 8,
         clearColor: 0,
         pixelPerfect: false,
-        maps: {}
+        maps: {},
+        spriteSheets: {}
     },  
 
     sounds: {
@@ -127,13 +126,22 @@ class Engine {
         }        
     }
 
-    setMap(mapName, mapData) {
-        GameEnvironement.internaly.canvas.loadMapAsResource(mapName, mapData);
+    setMap(mapName, spriteSheetName, mapData) {
+        GameEnvironement.internaly.canvas.loadMapAsResource(mapName, mapData, spriteSheetName);
     }
 
     addAudio(audioName, pathToFile) {
         GameEnvironement.sounds.sfx[audioName] = new Audio(pathToFile);
-    }
+    }    
+}
+
+function addSpriteSheet(spriteSheetName, path) {
+    GameEnvironement.graphics.spriteSheets[spriteSheetName] = {};
+    GameEnvironement.graphics.spriteSheets[spriteSheetName].path = path;
+    GameEnvironement.graphics.spriteSheets[spriteSheetName].data = {original: undefined, spriteSheet: undefined};
+
+    GameEnvironement.graphics.spriteSheetNames ? 0 : GameEnvironement.graphics.spriteSheetNames = [];
+    GameEnvironement.graphics.spriteSheetNames.push(spriteSheetName);
 }
 
 function updateControls() {

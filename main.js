@@ -41,7 +41,7 @@ function spanCoin() {
 function init() {
     player = new Player();
     coin = new Coin();
-    engine.setMap('main-map', map);
+    engine.setMap('main-map', 'main', map);
     engine.addAudio('collect', 'assets/audio/collect_coin.wav');
     spanCoin();
 }
@@ -86,7 +86,7 @@ function UpdateGame(deltaTime) {
 }
 
 function drawObject(canvasHandler, object) {
-    canvasHandler.drawSprite(object.sprite, object.x, object.y);
+    canvasHandler.drawSprite(object.sprite, 'main',  object.x, object.y);
 }
 
 function DrawGame(canvasHandler) {
@@ -105,5 +105,7 @@ GameEnvironement.functions.init = init;
 GameEnvironement.graphics.pixelPerfect = false;
 GameEnvironement.graphics.fps = 60;
 GameEnvironement.graphics.autoFitScreen = true;
+
+addSpriteSheet('main', './assets/spriteSheet.png');
 
 const engine = new Engine();
