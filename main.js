@@ -22,13 +22,13 @@ class Coin {
 }
 
 const map = [
-    [0, 1, 1, 2, 1, 1, 3],
-    [8,-1,-1,-1,-1,-1,11],
-    [8,-1,-1,-1,-1,-1,11],
-    [8,-1,-1,-1,-1,-1,11],
-    [8,-1,-1,-1,-1,-1,11],
-    [16, 1, 1, 1, 1, 1,19]
-]
+    [0, 1, 1, 1, 1, 1, 3],
+    [16,-1,-1,-1,-1,-1,19],
+    [16,-1,-1,-1,-1,-1,19],
+    [16,-1,-1,-1,-1,-1,19],
+    [16,-1,-1,-1,-1,-1,19],
+    [32,1,1,2,1,1,35]
+];
 
 let player;
 let coin;
@@ -44,6 +44,10 @@ function init() {
     engine.setMap('main-map', 'main', map);
     engine.addAudio('collect', 'assets/audio/collect_coin.wav');
     spanCoin();
+    console.log(GameEnvironement.internaly.canvas.getSpriteData(15, 'main'));
+    console.log(GameEnvironement.internaly.canvas.getSpriteData(16, 'main'));
+    console.log(GameEnvironement.internaly.canvas.getSpriteData(17, 'main'));
+    
 }
 
 function collide(obj1, obj2) {
@@ -91,11 +95,13 @@ function drawObject(canvasHandler, object) {
 
 function DrawGame(canvasHandler) {
     canvasHandler.cls();
+    canvasHandler.drawSprite(16, 'main',  0, 0);
     canvasHandler.drawMap('main-map', 0, 0);
     drawObject(canvasHandler, player);
     drawObject(canvasHandler, coin);
     canvasHandler.drawText("fps: " + Math.round(GameEnvironement.properties.actual_fps), 2, 7, 1, 100)
     canvasHandler.drawText("score: " + player.score, 135, 7, 1, 100)
+    
 }
 
 GameEnvironement.gameName = 'Saturn91 - coin Collector';

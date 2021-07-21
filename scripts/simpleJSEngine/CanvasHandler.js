@@ -31,8 +31,6 @@ class CanvasHandler {
     }
 
     resizeCanvas(canvas) {
-        if(!is2Component(GameEnvironement.graphics.tileSize) || GameEnvironement.graphics.tileSize > 64) console.warn('Tile size should be [1,2,4,8,16,32 or 64!]: but is ' + GameEnvironement.graphics.tileSize)
-
         if(GameEnvironement.graphics.windowWidth == undefined) { GameEnvironement.graphics.windowWidth = window.innerWidth-4 }
         if(GameEnvironement.graphics.windowHeight == undefined) { GameEnvironement.graphics.windowHeight = window.innerHeight-4 }
 
@@ -78,21 +76,27 @@ class CanvasHandler {
                 this.spriteSheet = document.createElement('img');
                 let canvas = document.createElement('canvas');
     
-                let tileNum = 64 / GameEnvironement.graphics.tileSize;
+                let originalImageWidth = GameEnvironement.graphics.spriteSheets[currentID].data.original.width;
+                let originalImageHeight = GameEnvironement.graphics.spriteSheets[currentID].data.original.height;
+
+                let tileNumX = originalImageWidth / GameEnvironement.graphics.spriteSheets[currentID].data.tileSize;
+                let tileNumY = originalImageHeight / GameEnvironement.graphics.spriteSheets[currentID].data.tileSize;
                 
-                canvas.width = 64 + (tileNum-1)*2 + 2;
-                canvas.height = 64 + (tileNum-1)*2 + 2;
+                canvas.width = originalImageWidth + (tileNumX-1)*2 + 2;
+                canvas.height = originalImageHeight + (tileNumX-1)*2 + 2;
+
+                GameEnvironement.graphics.spriteSheets[currentID].data.numSpriteX = tileNumX;
+                GameEnvironement.graphics.spriteSheets[currentID].data.numSpriteY = tileNumY;
     
                 let spriteSheetCTX = canvas.getContext('2d');
     
-                let tileSize = GameEnvironement.graphics.tileSize; 
+                let tileSize = GameEnvironement.graphics.spriteSheets[currentID].data.tileSize;
                    
-                for(let x = 0; x < 64 / tileNum; x++) {
-                    for(let y = 0; y < 64 / tileNum; y++) {
-                        let scaleFactor = (x+y*tileSize)%(64/tileSize);
-                        
-                        let posInSheetx = (scaleFactor)*tileSize;
-                        let posInSheety = ((x+y*tileSize)-scaleFactor);
+                for(let x = 0; x < tileNumX; x++) {
+                    for(let y = 0; y < tileNumY; y++) {
+
+                        let posInSheetx = x*tileSize;
+                        let posInSheety = y*tileSize;
     
                         let posXOnCanvas = x*(tileSize+2)+1;
                         let posYOnCanvas = y*(tileSize+2)+1;
@@ -160,6 +164,7 @@ class CanvasHandler {
                 }
     
                 GameEnvironement.graphics.spriteSheets[currentID].data.spriteSheet = canvas;
+                
                 GameEnvironement.graphics.ready --;
                 if(GameEnvironement.graphics.ready <= 0) {
                     callBack();
@@ -173,16 +178,19 @@ class CanvasHandler {
     loadMapAsResource(name, mapData, spriteSheetName) {
         let mapCanvas = document.createElement('canvas');
 
-        mapCanvas.width = mapData[0].length*GameEnvironement.graphics.tileSize;
-        mapCanvas.height = mapData.length*GameEnvironement.graphics.tileSize;
+        let tileSize = GameEnvironement.graphics.spriteSheets[spriteSheetName].data.tileSize;
+
+        mapCanvas.width = mapData[0].length*tileSize;
+        mapCanvas.height = mapData.length*tileSize;
 
         let mapContext = mapCanvas.getContext('2d');
         
         for(let x = 0; x < mapData[0].length; x++) {
             for( let y = 0; y < mapData.length; y++) {
-                console.log('yop!');
-                if (mapData[y][x] >= 0) {                    
-                    this.drawSpriteOnContext(mapContext, spriteSheetName, this.getSpriteData(mapData[y][x]), x*GameEnvironement.graphics.tileSize, y*GameEnvironement.graphics.tileSize);
+                if (mapData[y][x] >= 0) { 
+                    let spriteData = this.getSpriteData(mapData[y][x], spriteSheetName);      
+
+                    this.drawSpriteOnContext(mapContext, spriteSheetName, spriteData, x*tileSize, y*tileSize);
                 }             
             }
         }
@@ -226,7 +234,7 @@ class CanvasHandler {
             yPos = Math.round(y)
         }
 
-        this.drawSpriteOnContext(this.ctx, spriteSheetName, this.getSpriteData(sprite), xPos, yPos);
+        this.drawSpriteOnContext(this.ctx, spriteSheetName, this.getSpriteData(sprite, spriteSheetName), xPos, yPos);
     }
 
     drawSpriteOnContext(context, spriteSheetName, spriteData, x, y) {
@@ -242,13 +250,15 @@ class CanvasHandler {
             spriteData.tileSize);    
     }
 
-    getSpriteData(sprite) {
-        let tileSize = GameEnvironement.graphics.tileSize
-        let scaleFactor = 64/tileSize;
+    getSpriteData(sprite, spriteSheetName) {
+        let tileSize = GameEnvironement.graphics.spriteSheets[spriteSheetName].data.tileSize;
+
+        let spritesInX = GameEnvironement.graphics.spriteSheets[spriteSheetName].data.numSpriteX;
+        let spritesInY = GameEnvironement.graphics.spriteSheets[spriteSheetName].data.numSpriteY;
         return {
             tileSize: tileSize,
-            spriteOffX: (sprite%(scaleFactor))*(tileSize+2)+1,
-            spriteOffY: (sprite-(sprite%(scaleFactor)))/scaleFactor*(tileSize+2)+1
+            spriteOffX: (sprite%(spritesInX))*(tileSize+2)+1,
+            spriteOffY: ((sprite-(sprite%(spritesInX)))/spritesInX)*(tileSize+2)+1
         }
     }
 

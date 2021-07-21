@@ -14,7 +14,6 @@ const GameEnvironement = {
         resolutionX: 160,
         resolutionY: 128,
         fps: 60,
-        tileSize: 8,
         clearColor: 0,
         pixelPerfect: false,
         maps: {},
@@ -135,13 +134,17 @@ class Engine {
     }    
 }
 
-function addSpriteSheet(spriteSheetName, path) {
+function addSpriteSheet(spriteSheetName, path, tileSize) {
+    if(!tileSize) tileSize = 8;
     GameEnvironement.graphics.spriteSheets[spriteSheetName] = {};
     GameEnvironement.graphics.spriteSheets[spriteSheetName].path = path;
     GameEnvironement.graphics.spriteSheets[spriteSheetName].data = {original: undefined, spriteSheet: undefined};
+    GameEnvironement.graphics.spriteSheets[spriteSheetName].data.tileSize = tileSize;
 
     GameEnvironement.graphics.spriteSheetNames ? 0 : GameEnvironement.graphics.spriteSheetNames = [];
     GameEnvironement.graphics.spriteSheetNames.push(spriteSheetName);
+
+    if(!is2Component(tileSize)) console.warn('Tile size should be [1,2,4,8,16,32,64...!]: but is ' + tileSize)
 }
 
 function updateControls() {
