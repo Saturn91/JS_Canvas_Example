@@ -42,6 +42,7 @@ function init() {
     player = new Player();
     coin = new Coin();
     engine.setMap('main-map', map);
+    engine.addAudio('collect', 'assets/audio/collect_coin.wav');
     spanCoin();
 }
 
@@ -78,6 +79,7 @@ function UpdateGame(deltaTime) {
     
     //check if player is ontop of coin
     if(collide(player, coin)) {
+        GameEnvironement.sounds.sfx['collect'].play();
         spanCoin();
         player.score += 1;
     }

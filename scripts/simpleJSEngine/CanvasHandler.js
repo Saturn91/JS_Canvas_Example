@@ -31,7 +31,6 @@ class CanvasHandler {
     }
 
     resizeCanvas(canvas) {
-        console.log('resize Canvas!');
         if(!is2Component(GameEnvironement.graphics.tileSize) || GameEnvironement.graphics.tileSize > 64) console.warn('Tile size should be [1,2,4,8,16,32 or 64!]: but is ' + GameEnvironement.graphics.tileSize)
 
         if(GameEnvironement.graphics.windowWidth == undefined) { GameEnvironement.graphics.windowWidth = window.innerWidth-4 }

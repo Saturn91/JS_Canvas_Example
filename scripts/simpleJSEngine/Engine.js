@@ -22,6 +22,10 @@ const GameEnvironement = {
         maps: {}
     },  
 
+    sounds: {
+        sfx: {}
+    },
+
     functions: {
         init: undefined,
         update: undefined,
@@ -125,6 +129,10 @@ class Engine {
 
     setMap(mapName, mapData) {
         GameEnvironement.internaly.canvas.loadMapAsResource(mapName, mapData);
+    }
+
+    addAudio(audioName, pathToFile) {
+        GameEnvironement.sounds.sfx[audioName] = new Audio(pathToFile);
     }
 }
 
