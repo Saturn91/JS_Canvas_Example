@@ -85,7 +85,7 @@ class Engine {
             GameEnvironement.internaly.canvas.ctx.restore();
             GameEnvironement.internaly.lastUpdate = timestamp
 
-            GameEnvironement.properties.actual_fps = ((GameEnvironement.properties.actual_fps-1) * 0.99 + 0.01 *  1000/timeDelta)+1; 
+            GameEnvironement.properties.actual_fps = ((GameEnvironement.properties.actual_fps) * 0.99 + 0.01 *  1000/timeDelta); 
 
             if(timestamp - GameEnvironement.properties.last_fps_update > GameEnvironement.properties.fps_update_rate_ms && GameEnvironement.properties.debug) {
                 GameEnvironement.properties.last_fps_update = timestamp;

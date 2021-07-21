@@ -14,7 +14,7 @@ class CanvasHandler {
         if(GameEnvironement.graphics.windowWidth == undefined) { GameEnvironement.graphics.windowWidth = window.innerWidth-4 }
         if(GameEnvironement.graphics.windowHeight == undefined) { GameEnvironement.graphics.windowHeight = window.innerHeight-4 }
 
-        if(Math.abs(this.scaleX-this.scaleY) > 0.01) {
+        if(Math.abs(GameEnvironement.graphics.windowWidth / GameEnvironement.graphics.resolutionX-GameEnvironement.graphics.windowHeight / GameEnvironement.graphics.resolutionY) > 0.01) {
             console.warn('resolutionX / windowWithd should be the same value as resolutionY / windowHeight! elswhise the image gets stretched!')
         }
 
@@ -148,18 +148,17 @@ class CanvasHandler {
 
     loadMapAsResource(name, mapData) {
         let mapCanvas = document.createElement('canvas');
-        console.log(8%8)
+
         mapCanvas.width = mapData[0].length*GameEnvironement.graphics.tileSize;
         mapCanvas.height = mapData.length*GameEnvironement.graphics.tileSize;
 
         let mapContext = mapCanvas.getContext('2d');
-        mapContext.fillStyle = "green";
+        
         for(let x = 0; x < mapData[0].length; x++) {
             for( let y = 0; y < mapData.length; y++) {
                 if (mapData[y][x] >= 0) {
                     let spriteData = this.getSpriteData(mapData[y][x]);
-                    console.log(mapData[y][x] + ' => ');
-                    console.log(spriteData);
+                    
                     this.drawSpriteOnContext(mapContext, this.getSpriteData(mapData[y][x]), x*GameEnvironement.graphics.tileSize, y*GameEnvironement.graphics.tileSize);
                 }             
             }
