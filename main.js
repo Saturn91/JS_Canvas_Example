@@ -143,7 +143,7 @@ function DrawGame(canvasHandler) {
     
 }
 
-GameEnvironement.gameName = 'Saturn91 - coin Collector';
+GameEnvironement.gameName = 'Saturn91 - get the woman!';
 GameEnvironement.functions.update = UpdateGame;
 GameEnvironement.functions.draw = DrawGame;
 GameEnvironement.functions.init = init;
