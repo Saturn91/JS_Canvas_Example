@@ -41,13 +41,9 @@ function spanCoin() {
 function init() {
     player = new Player();
     coin = new Coin();
-    engine.setMap('main-map', 'main', map);
+    engine.addMap('main-map', 'main', map);
     engine.addAudio('collect', 'assets/audio/collect_coin.wav');
-    spanCoin();
-    console.log(GameEnvironement.internaly.canvas.getSpriteData(15, 'main'));
-    console.log(GameEnvironement.internaly.canvas.getSpriteData(16, 'main'));
-    console.log(GameEnvironement.internaly.canvas.getSpriteData(17, 'main'));
-    
+    spanCoin();    
 }
 
 function collide(obj1, obj2) {
@@ -86,6 +82,7 @@ function UpdateGame(deltaTime) {
         GameEnvironement.sounds.sfx['collect'].play();
         spanCoin();
         player.score += 1;
+        engine.setMap('main-map', 1, 1, 2);
     }
 }
 

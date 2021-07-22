@@ -125,8 +125,21 @@ class Engine {
         }        
     }
 
-    setMap(mapName, spriteSheetName, mapData) {
+    addMap(mapName, spriteSheetName, mapData) {
         GameEnvironement.internaly.canvas.loadMapAsResource(mapName, mapData, spriteSheetName);
+    }
+
+    setMap(mapName, x, y, sprite) {
+        let ctx = GameEnvironement.graphics.maps[mapName].texture.getContext('2d');
+        let spriteSheetName = GameEnvironement.graphics.maps[mapName].spriteSheetName;
+        let tileSize = GameEnvironement.graphics.spriteSheets[spriteSheetName].data.tileSize;
+        console.log(mapName + ": " + " set " + x + "," + y + " to "+ sprite);
+        ctx.clearRect(x*tileSize, y*tileSize, tileSize, tileSize);        
+
+        GameEnvironement.internaly.canvas.drawSpriteOnContext(
+            ctx, spriteSheetName, 
+            GameEnvironement.internaly.canvas.getSpriteData(sprite, spriteSheetName),
+            x*tileSize, y*tileSize);        
     }
 
     addAudio(audioName, pathToFile) {

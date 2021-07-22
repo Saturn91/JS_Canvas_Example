@@ -194,8 +194,10 @@ class CanvasHandler {
                 }             
             }
         }
-
-        GameEnvironement.graphics.maps[name] = mapCanvas;
+        GameEnvironement.graphics.maps[name] = {
+            texture: mapCanvas,
+            spriteSheetName: spriteSheetName
+        }
     }
 
     setCanvasSize(windowWidth, windowHeight) {
@@ -247,14 +249,14 @@ class CanvasHandler {
             x,
             y,
             spriteData.tileSize,
-            spriteData.tileSize);    
+            spriteData.tileSize);
     }
 
     getSpriteData(sprite, spriteSheetName) {
         let tileSize = GameEnvironement.graphics.spriteSheets[spriteSheetName].data.tileSize;
 
         let spritesInX = GameEnvironement.graphics.spriteSheets[spriteSheetName].data.numSpriteX;
-        let spritesInY = GameEnvironement.graphics.spriteSheets[spriteSheetName].data.numSpriteY;
+        
         return {
             tileSize: tileSize,
             spriteOffX: (sprite%(spritesInX))*(tileSize+2)+1,
@@ -277,7 +279,7 @@ class CanvasHandler {
     
     drawMap(mapName, screenX, screenY, mapWidth, mapHeight) {
         this.ctx.drawImage(
-            GameEnvironement.graphics.maps[mapName],
+            GameEnvironement.graphics.maps[mapName].texture,
             screenX,
             screenY);
     }
