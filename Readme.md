@@ -1,4 +1,4 @@
-#Simple JS Game Engine
+# Simple JS Game Engine
 
 * For who?
     * Beginners in Web Gamedevelopement who just would like to code simple 2D games
