@@ -83,6 +83,7 @@ function UpdateGame(deltaTime) {
         spanCoin();
         player.score += 1;
         engine.setMap('main-map', 1, 1, 2);
+        console.log(engine.getMap('main-map', 1, 1));
     }
 }
 

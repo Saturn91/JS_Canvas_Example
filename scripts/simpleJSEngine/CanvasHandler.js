@@ -196,7 +196,8 @@ class CanvasHandler {
         }
         GameEnvironement.graphics.maps[name] = {
             texture: mapCanvas,
-            spriteSheetName: spriteSheetName
+            spriteSheetName: spriteSheetName,
+            mapData: mapData
         }
     }
 

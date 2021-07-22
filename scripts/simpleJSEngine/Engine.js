@@ -139,7 +139,12 @@ class Engine {
         GameEnvironement.internaly.canvas.drawSpriteOnContext(
             ctx, spriteSheetName, 
             GameEnvironement.internaly.canvas.getSpriteData(sprite, spriteSheetName),
-            x*tileSize, y*tileSize);        
+            x*tileSize, y*tileSize);   
+            GameEnvironement.graphics.maps[mapName].mapData[y][x] = sprite;     
+    }
+
+    getMap(mapName, x, y) {
+        return GameEnvironement.graphics.maps[mapName].mapData[y][x];
     }
 
     addAudio(audioName, pathToFile) {
