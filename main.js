@@ -21,28 +21,64 @@ class Coin {
     }
 }
 
-const map = [
-    [0, 1, 1, 1, 1, 1, 3],
-    [16,-1,-1,-1,-1,-1,19],
-    [16,-1,-1,-1,-1,-1,19],
-    [16,-1,-1,-1,-1,-1,19],
-    [16,-1,-1,-1,-1,-1,19],
-    [32,1,1,2,1,1,35]
-];
+let map = [];
 
 let player;
 let coin;
 
+/**
+ * Generate a 2d array which contains sprite numbers [y][x]
+ */
+function createMap() {
+    let mapWidth = 20;
+    let mapHeight = 16;
+    map = [mapHeight];
+    for(let y = 0; y < mapHeight; y++) {
+        map[y] = [mapWidth];
+        for(let x = 0; x < mapWidth; x++) {
+            if( x == 0 || x == mapWidth-1) {
+                if(y == 0) {
+                    if (x == 0) {
+                        map[y][x] = 0; 
+                    } else {
+                        map[y][x] = 3;
+                    }                    
+                } else if ( y == mapHeight -1) { 
+                    if (x == 0) {
+                        map[y][x] = 32; 
+                    } else {
+                        map[y][x] = 35;
+                    } 
+                } else if (x == 0) {
+                    map[y][x] = 16;
+                } else {
+                    map[y][x] = 19;
+                }              
+            } else {
+                if (y == 0 || y == mapHeight -1) {
+                    map[y][x] = 1
+                } else {
+                    map[y][x] = -1; //empty
+                }                
+            }
+        }
+    }
+}
+
 function spanCoin() {
-    coin.x = Math.round(Math.random() * (GameEnvironement.graphics.resolutionX-8));
-    coin.y = Math.round(Math.random() * (GameEnvironement.graphics.resolutionY-8));
+    coin.x = Math.round(Math.random() * (GameEnvironement.graphics.resolutionX-16)+8);
+    coin.y = Math.round(Math.random() * (GameEnvironement.graphics.resolutionY-16)+8);
 }
 
 function init() {
     player = new Player();
     coin = new Coin();
+
+    createMap();
     engine.addMap('main-map', 'main', map);
+
     engine.addAudio('collect', 'assets/audio/collect_coin.wav');
+
     spanCoin();    
 }
 
@@ -55,8 +91,10 @@ function collide(obj1, obj2) {
 }
 
 function UpdateGame(deltaTime) {
+    //move player
     let right = GameEnvironement.input.cmdDown['right'];
     let left = GameEnvironement.input.cmdDown['left'];
+
     if((right &! left) || (left &! right)) {
         if(right) {
             player.x += player.speed * deltaTime/1000;
@@ -79,11 +117,11 @@ function UpdateGame(deltaTime) {
     
     //check if player is ontop of coin
     if(collide(player, coin)) {
+
         GameEnvironement.sounds.sfx['collect'].play();
         spanCoin();
+
         player.score += 1;
-        engine.setMap('main-map', 1, 1, 2);
-        console.log(engine.getMap('main-map', 1, 1));
     }
 }
 
@@ -93,12 +131,15 @@ function drawObject(canvasHandler, object) {
 
 function DrawGame(canvasHandler) {
     canvasHandler.cls();
+
     canvasHandler.drawSprite(16, 'main',  0, 0);
     canvasHandler.drawMap('main-map', 0, 0);
+
     drawObject(canvasHandler, player);
     drawObject(canvasHandler, coin);
-    canvasHandler.drawText("fps: " + Math.round(GameEnvironement.properties.actual_fps), 2, 7, 1, 100)
-    canvasHandler.drawText("score: " + player.score, 135, 7, 1, 100)
+
+    canvasHandler.drawText("fps: " + Math.round(GameEnvironement.properties.actual_fps), 5, 14, 1, 100)
+    canvasHandler.drawText("score: " + player.score, 130, 14, 1, 100)
     
 }
 
@@ -110,6 +151,6 @@ GameEnvironement.graphics.pixelPerfect = false;
 GameEnvironement.graphics.fps = 60;
 GameEnvironement.graphics.autoFitScreen = true;
 
-addSpriteSheet('main', './assets/spriteSheet.png');
+addSpriteSheet('main', './assets/spriteSheet.png'); //spritesheet made by: https://opengameart.org/content/mini-roguelike-8x8-tiles
 
 const engine = new Engine();
