@@ -74,6 +74,10 @@ class Engine {
         GameEnvironement.internaly.engine = this;
     }
 
+    /**
+    * !!engine internal do not call!! 
+    * main Game loop calling the functions which are defined in GameEnvironement.functions (draw / update)
+    */
     loop(timestamp) {
         let inputFPS = 120;
         if(GameEnvironement.graphics.fps < 60) {
@@ -101,6 +105,10 @@ class Engine {
         window.requestAnimationFrame(GameEnvironement.loop)
     }
 
+    /**
+    * !!engine internal do not call!! 
+    * gets fired right after all resources are loaded, calls the in GameEnvironement.functions defined "init" function
+    */
     start() {        
         GameEnvironement.properties.actual_fps = GameEnvironement.graphics.fps;
         GameEnvironement.internaly.lastUpdate = 0
@@ -109,6 +117,10 @@ class Engine {
         window.requestAnimationFrame(GameEnvironement.loop)
     }
 
+    /**
+    * !!engine internal do not call!! 
+    * Wait until all resources are loaded
+    */
     waitForInitialization() {
         GameEnvironement.initialized.ready = GameEnvironement.initialized.canvas;
 
@@ -125,10 +137,27 @@ class Engine {
         }        
     }
 
+    /**
+     * add a new Map to GameEnvironement.
+     *
+     * @param {string} mapName: the id of the added Map
+     * @param {string} spriteSheetName: name of an already defined spriteSheet
+     * @param {Array} mapData: twodimensional array i.e. [[0,0,0],[-1,-1,-1],[1,1,1]] this results in a 3x3 Map first line would be 3x Sprite 0 of spriteSheetName, 2nd line empty, 3rd line 3x sprite 1
+     * @return {void} creates map Object in GameEnvironement
+     */
     addMap(mapName, spriteSheetName, mapData) {
         GameEnvironement.internaly.canvas.loadMapAsResource(mapName, mapData, spriteSheetName);
+        
     }
 
+    /**
+     * change a Tile within a map
+     *
+     * @param {string} mapName: the id of a defined Map you want to edit
+     * @param {number} x: x-position in grid (should be an integer) 
+     * @param {number} y: y-position in grid (should be an integer) 
+     * @param {number} sprite: sprite to be drawn on the map (0 = top left sprite in this maps spritesheet, (SpriteSheetWidth/TileSize)*(SpriteSheetHeight/TileSize))-1 = lower right sprite
+     */
     setMap(mapName, x, y, sprite) {
         let ctx = GameEnvironement.graphics.maps[mapName].texture.getContext('2d');
         let spriteSheetName = GameEnvironement.graphics.maps[mapName].spriteSheetName;
@@ -136,22 +165,45 @@ class Engine {
         console.log(mapName + ": " + " set " + x + "," + y + " to "+ sprite);
         ctx.clearRect(x*tileSize, y*tileSize, tileSize, tileSize);        
 
-        GameEnvironement.internaly.canvas.drawSpriteOnContext(
-            ctx, spriteSheetName, 
-            GameEnvironement.internaly.canvas.getSpriteData(sprite, spriteSheetName),
-            x*tileSize, y*tileSize);   
-            GameEnvironement.graphics.maps[mapName].mapData[y][x] = sprite;     
+        if (sprite >= 0) {
+            GameEnvironement.internaly.canvas.drawSpriteOnContext(
+                ctx, spriteSheetName, 
+                GameEnvironement.internaly.canvas.getSpriteData(sprite, spriteSheetName),
+                x*tileSize, y*tileSize);   
+                GameEnvironement.graphics.maps[mapName].mapData[y][x] = sprite;
+        }        
     }
 
+    /**
+     * get Tile(Number) from the connected Spritesheet of a Map at a specific location
+     *
+     * @param {string} mapName: the id of a defined Map you want to get the sprite from
+     * @param {number} x: x-position in grid (should be an integer) 
+     * @param {number} y: y-position in grid (should be an integer) 
+     * @return {number}: the sprite at location mapData[y][x]
+     */
     getMap(mapName, x, y) {
         return GameEnvironement.graphics.maps[mapName].mapData[y][x];
     }
 
+    /**
+     * Add Sfx to GameEnvironement
+     *
+     * @param {string} audioName: the id of the defined Sound get the initialized Audio by calling: GameEnvironement.sounds.shx[audioName] -> get {@link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAudioElement HTMLAudioElement}
+     * @param {string} pathToFile: path to sound file
+     */
     addAudio(audioName, pathToFile) {
         GameEnvironement.sounds.sfx[audioName] = new Audio(pathToFile);
     }    
 }
 
+/**
+     * Preload Tileset, Use this befor you create engine with 'new Engine()'!
+     *
+     * @param {string} spriteSheetName: the id of the defined SpriteSheet
+     * @param {string} path: path to sound file
+     * @param {number} tileSize: (optional) default 8
+     */
 function addSpriteSheet(spriteSheetName, path, tileSize) {
     if(!tileSize) tileSize = 8;
     GameEnvironement.graphics.spriteSheets[spriteSheetName] = {};
@@ -162,9 +214,13 @@ function addSpriteSheet(spriteSheetName, path, tileSize) {
     GameEnvironement.graphics.spriteSheetNames ? 0 : GameEnvironement.graphics.spriteSheetNames = [];
     GameEnvironement.graphics.spriteSheetNames.push(spriteSheetName);
 
-    if(!is2Component(tileSize)) console.warn('Tile size should be [1,2,4,8,16,32,64...!]: but is ' + tileSize)
+    if(!is2Component(tileSize)) console.warn('Tile size should be [1,2,4,8,16,32,64...!]: but is ' + tileSize);
 }
 
+/**
+* !!engine internal do not call!! 
+* updates control flags so they can be used
+*/
 function updateControls() {
     for(let i = 0; i < GameEnvironement.input.cmdsOnKeys.length; i++) {
         let oldValue = GameEnvironement.input.cmdDown[GameEnvironement.input.cmdsOnKeys[i].name];
@@ -177,10 +233,17 @@ function updateControls() {
     }
 }
 
+/**
+* !!engine internal do not call!! 
+*/
 onkeydown = onkeyup = function(e){
     GameEnvironement.input.keyMap[e.key] = e.type == 'keydown';
 }
 
+/**
+* !!engine internal do not call!! 
+* initial setup of controls
+*/
 function SetupControls() {
     
     document.addEventListener('keydown', (e) => {
@@ -192,6 +255,12 @@ function SetupControls() {
     });
 }
 
+/**
+ * Internal debugger if type = undefined msg's are default console.log's but hidden until the GameEnvironement.properties.debug is set to true
+ * @param {string} msg: the displayed text of the log
+ * @param {string} component: component name i.e. main.js/update(), this helps to identify where in the code the msg was fired/**
+ * @param {string} type: (optional) ['undefined': (normal), 'warning': warning, 'error': error]
+*/
 function debug(msg, component, type) {
     if(!component) {
         console.warn('please set componentName!');
@@ -213,10 +282,18 @@ function debug(msg, component, type) {
     }
 }
 
+/**
+ * Clear all defined (also the default up, left etc...) cmds
+ */
 function clearAllCMS() {
     GameEnvironement.input.cmdsOnKeys = [];
 }
 
+/**
+ * Add a new Keyboard CMD
+ * @param {string} cmdName: the cmd name i.e. 'up' you can check if key is pressed with: GameEnvironement.input.onkeydown['up'] and if key up with: GameEnvironement.input.onkeyup['up']
+ * @param {string} keyCodes: the event.key value of the desired key: i.e. 'w', checkout this websites {@link https://keycode.info/ here} and {@link https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/ here} for help on that 
+ */
 function AddCMD(cmdName, keyCodes) {
     let cmd = undefined;
     for(let i = 0; i < GameEnvironement.input.cmdsOnKeys.length; i++) {
@@ -225,7 +302,7 @@ function AddCMD(cmdName, keyCodes) {
             break;
         }
     }
-
+    
     if(!cmd) {
         GameEnvironement.input.cmdsOnKeys.push({name: cmdName, keys: keyCodes});
     } else {
@@ -244,6 +321,10 @@ function AddCMD(cmdName, keyCodes) {
     }
 }
 
+/**
+ * clear one cmd which is no longer used from the cmd set
+ * @param {string} cmdName: the cmd name i.e. 'up' you would like to remove
+ */
 function RemCMD(cmdName) {
     for(let i = 0; i < GameEnvironement.input.cmdsOnKeys.length; i++) {
         if(GameEnvironement.input.cmdsOnKeys[i].name === cmdName) {
