@@ -61,6 +61,8 @@ class CanvasHandler {
     }
 
     loadSpriteSheet(callBack) {  
+        if(!GameEnvironement.graphics.spriteSheetNames) return
+        
         GameEnvironement.graphics.ready = GameEnvironement.graphics.spriteSheetNames.length;
         for(let i = 0; i < GameEnvironement.graphics.spriteSheetNames.length; i++) {
             let currentID = GameEnvironement.graphics.spriteSheetNames[i];

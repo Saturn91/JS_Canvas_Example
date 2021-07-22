@@ -1,7 +1,6 @@
 # Usage
 1. Download the whole zip file of an empty project or of one of the example projects in the release folder. 
 1. Extract the Folder in your Document Folder (IMAGE)
-(IMAGE + LINK)
 1. Download and install visual studio code for your OS (IMAGE + LINK)
 1. Open Visual Studio
 1. Click on File/Open Folder (IMAGE)
