@@ -254,13 +254,13 @@ class CanvasHandler {
         let yOff = spriteData.spriteOffY;
         if(flipX) {
             spriteSheet = GameEnvironement.graphics.spriteSheets[spriteSheetName].data.flippedX;
-            xOff = GameEnvironement.graphics.spriteSheets[spriteSheetName].data.numSpriteX*spriteData.tileSize - (spriteData.spriteOffX - 3 * spriteData.tileSize)
+            xOff = (GameEnvironement.graphics.spriteSheets[spriteSheetName].data.numSpriteX*spriteData.tileSize + spriteData.tileSize) - (spriteData.spriteOffX + spriteData.tileSize)
 
             if(flipY) {
                 debug('flipX and flipY can not be true both...', 'CanvasHandler.drawSpriteOnContext', 'warning');
             }
         } else if(flipY) {
-            yOff = GameEnvironement.graphics.spriteSheets[spriteSheetName].data.numSpriteY*spriteData.tileSize - (spriteData.spriteOffY - 3 * spriteData.tileSize)
+            yOff = (GameEnvironement.graphics.spriteSheets[spriteSheetName].data.numSpriteY*spriteData.tileSize + spriteData.tileSize) - (spriteData.spriteOffY + spriteData.tileSize)
             spriteSheet = GameEnvironement.graphics.spriteSheets[spriteSheetName].data.flippedY;            
         }        
 

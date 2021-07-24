@@ -15,41 +15,19 @@ function collide(obj1, obj2) {
 }
 
 function UpdateGame(deltaTime) {
-    //move player
-    let right = GameEnvironement.input.cmdDown['right'];
-    let left = GameEnvironement.input.cmdDown['left'];
-
-    if((right &! left) || (left &! right)) {
-        if(right) {
-            player.x += player.speed * deltaTime/1000;
-        }
-        if(left) {
-            player.x -= player.speed * deltaTime/1000;
-        }
-    }
-
-    let up = GameEnvironement.input.cmdDown['up'];
-    let down = GameEnvironement.input.cmdDown['down'];
-    if((up &! down) || (down &! up)) {
-        if(up) {
-            player.y -= player.speed * deltaTime/1000;
-        }
-        if(down) {
-            player.y += player.speed * deltaTime/1000;
-        }
-    }
+    player.update(deltaTime);
 }
 
 function drawObject(canvasHandler, object) {
-    canvasHandler.drawSprite(object.sprite, 'main',  object.x, object.y);
+    canvasHandler.drawSprite(object.sprite, 'char1_sprites',  object.x, object.y);
 }
 
 function DrawGame(canvasHandler) {
     canvasHandler.cls();
 
-    drawObject(canvasHandler, player);
+    player.draw(canvasHandler);
 
-    canvasHandler.drawText("fps: " + Math.round(GameEnvironement.properties.actual_fps), 2, 7, 1, 100)    
+    canvasHandler.drawText("fps: " + Math.round(GameEnvironement.properties.actual_fps), 2, 7, 1, 100)
 }
 
 GameEnvironement.gameName = 'An Adventure!';
@@ -62,6 +40,6 @@ GameEnvironement.graphics.autoFitScreen = true;
 GameEnvironement.graphics.resolutionX = 200;
 GameEnvironement.graphics.resolutionY = 150;
 
-addSpriteSheet('main', './assets/char_1_sheet.png', undefined, 16);
+addSpriteSheet('char1_sprites', './assets/char_1_sheet.png', undefined, 16);
 
 const engine = new Engine();
