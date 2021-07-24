@@ -132,8 +132,10 @@ function drawObject(canvasHandler, object) {
 function DrawGame(canvasHandler) {
     canvasHandler.cls();
 
-    canvasHandler.drawSprite(16, 'main',  0, 0);
     canvasHandler.drawMap('main-map', 0, 0);
+    canvasHandler.drawSprite(20, 'main', 20, 20, true)
+    canvasHandler.drawSprite(20, 'main', 20, 28, false)
+    canvasHandler.drawSprite(20, 'main', 28, 20, false, true)
 
     drawObject(canvasHandler, player);
     drawObject(canvasHandler, coin);

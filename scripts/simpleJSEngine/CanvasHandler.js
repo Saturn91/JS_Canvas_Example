@@ -163,7 +163,14 @@ class CanvasHandler {
                     }
                 }
     
-                GameEnvironement.graphics.spriteSheets[currentID].data.spriteSheet = canvas;
+                GameEnvironement.graphics.spriteSheets[currentID].data.spriteSheet = document.createElement('canvas');
+                GameEnvironement.graphics.spriteSheets[currentID].data.spriteSheet.getContext('2d').drawImage(canvas, 0, 0);
+                GameEnvironement.graphics.spriteSheets[currentID].data.flippedX = document.createElement('canvas');
+                GameEnvironement.graphics.spriteSheets[currentID].data.flippedX.getContext('2d').scale(-1,1);
+                GameEnvironement.graphics.spriteSheets[currentID].data.flippedX.getContext('2d').drawImage(canvas, -canvas.width, 0);
+                GameEnvironement.graphics.spriteSheets[currentID].data.flippedY = document.createElement('canvas');
+                GameEnvironement.graphics.spriteSheets[currentID].data.flippedY.getContext('2d').scale(1,-1);
+                GameEnvironement.graphics.spriteSheets[currentID].data.flippedY.getContext('2d').drawImage(canvas, 0, -canvas.height);
                 
                 GameEnvironement.graphics.ready --;
                 if(GameEnvironement.graphics.ready <= 0) {
@@ -227,7 +234,7 @@ class CanvasHandler {
         this.ctx.fillRect(Math.round(x),Math.round(y),w,h);
     }
 
-    drawSprite(sprite, spriteSheetName, x, y) { 
+    drawSprite(sprite, spriteSheetName, x, y, flipX, flipY) { 
         
         let xPos = x;
         let yPos = y;
@@ -237,14 +244,29 @@ class CanvasHandler {
             yPos = Math.round(y)
         }
 
-        this.drawSpriteOnContext(this.ctx, spriteSheetName, this.getSpriteData(sprite, spriteSheetName), xPos, yPos);
+        this.drawSpriteOnContext(this.ctx, spriteSheetName, this.getSpriteData(sprite, spriteSheetName), xPos, yPos, flipX, flipY);
     }
 
-    drawSpriteOnContext(context, spriteSheetName, spriteData, x, y) {
+    drawSpriteOnContext(context, spriteSheetName, spriteData, x, y, flipX, flipY) {  
+        let spriteSheet =  GameEnvironement.graphics.spriteSheets[spriteSheetName].data.spriteSheet;
+        let xOff = spriteData.spriteOffX;
+        let yOff = spriteData.spriteOffY;
+        if(flipX) {
+            spriteSheet = GameEnvironement.graphics.spriteSheets[spriteSheetName].data.flippedX;
+            xOff = GameEnvironement.graphics.spriteSheets[spriteSheetName].data.numSpriteX*spriteData.tileSize - (spriteData.spriteOffX - 3 * spriteData.tileSize)
+
+            if(flipY) {
+                debug('flipX and flipY can not be true both...', 'CanvasHandler.drawSpriteOnContext', 'warning');
+            }
+        } else if(flipY) {
+            yOff = GameEnvironement.graphics.spriteSheets[spriteSheetName].data.numSpriteY*spriteData.tileSize - (spriteData.spriteOffY - 3 * spriteData.tileSize)
+            spriteSheet = GameEnvironement.graphics.spriteSheets[spriteSheetName].data.flippedY;            
+        }        
+
         context.drawImage(
-            GameEnvironement.graphics.spriteSheets[spriteSheetName].data.spriteSheet,
-            spriteData.spriteOffX,
-            spriteData.spriteOffY,
+            spriteSheet,
+            xOff,
+            yOff,
             spriteData.tileSize,
             spriteData.tileSize,
             x,
