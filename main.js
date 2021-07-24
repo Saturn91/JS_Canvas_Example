@@ -136,8 +136,8 @@ function DrawGame(canvasHandler) {
     drawObject(canvasHandler, player);
     drawObject(canvasHandler, coin);
 
-    canvasHandler.drawText("fps: " + Math.round(GameEnvironement.properties.actual_fps), 5, 14, 1, 100)
-    canvasHandler.drawText("score: " + player.score, 130, 14, 1, 100)
+    canvasHandler.drawText("fps: " + Math.round(GameEnvironement.properties.actual_fps), 5, 14, '#ffffff', 100)
+    canvasHandler.drawText("score: " + player.score, 130, 14, '#ffffff', 100)
     
 }
 
