@@ -18,13 +18,14 @@ class SpriteAnimation {
         this.playing = true;
         this.loop = false;
         this.lastUpdate = 0;
+        this.durationMultiplier = 1;
     }
 
     /**
      * Call this function once every frame as long as the animation is playing
      */
     update() {
-        if(this.playing && GameEnvironement.time - this.lastUpdate >= this.durations[this.currentFrame]) {
+        if(this.playing && GameEnvironement.time - this.lastUpdate >= this.durations[this.currentFrame] / this.durationMultiplier) {
             this.currentFrame += 1
             if(this.currentFrame >= this.sprites.length) {
                 this.currentFrame = 0;
@@ -69,5 +70,13 @@ class SpriteAnimation {
     stop() {
         this.playing = false;
         return this.currentFrame;
+    }
+
+    /**
+     * Set the duration multiplier i.e. for a character with different speeds on the same animation, default value is 1
+     * @param {number} multiplier 
+     */
+    setDurationMultiplier(multiplier) {
+        this.durationMultiplier = multiplier;
     }
 }

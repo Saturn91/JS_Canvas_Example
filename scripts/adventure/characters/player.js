@@ -35,6 +35,7 @@ class Player {
             200,
             200]
         );
+        this.animations['walk_right'].setDurationMultiplier(1.5);
 
         this.animations['walk_left'] = new SpriteAnimation('player-walk-left', 
         [
@@ -47,6 +48,7 @@ class Player {
             200,
             200]
         );
+        this.animations['walk_left'].setDurationMultiplier(1.5);
 
         this.animations['walk_up'] = new SpriteAnimation('player-walk-up', 
         [
@@ -59,6 +61,7 @@ class Player {
             200,
             200]
         );
+        this.animations['walk_up'].setDurationMultiplier(1.5);
 
         this.animations['walk_down'] = new SpriteAnimation('player-walk-down', 
         [
@@ -71,6 +74,7 @@ class Player {
             200,
             200]
         );
+        this.animations['walk_down'].setDurationMultiplier(1.5);
     }
 
     draw(canvasHandler) {
