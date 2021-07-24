@@ -23,6 +23,7 @@ GameEnvironement.gameName = 'Your Game Name';
 //GameEnvironement.resolutionY = 128;
 
 // connect above functions with engine
+
 GameEnvironement.functions.update = UpdateGame;
 GameEnvironement.functions.draw = DrawGame;
 GameEnvironement.functions.init = init;
