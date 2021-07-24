@@ -14,7 +14,7 @@ const GameEnvironement = {
         resolutionX: 160,
         resolutionY: 128,
         fps: 60,
-        clearColor: 0,
+        clearColor: '#000000',
         pixelPerfect: false,
         maps: {},
         spriteSheets: {}
