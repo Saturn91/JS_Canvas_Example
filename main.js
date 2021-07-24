@@ -79,10 +79,17 @@ function init() {
 
     engine.addAudio('collect', 'assets/audio/collect_coin.wav');
 
-    spanCoin();    
+    spanCoin(); 
+    
+    setSpriteFlag(0, 'main', 0, true);
+    setSpriteFlag(0, 'main', 1, true);
+    setSpriteFlag(0, 'main', 2, true);
+    setSpriteFlag(0, 'main', 7, true);
 
-    for(let i = 0; i < 9; i++) {
-        console.log(getSpriteFlag(i,'main', 2));
+    for(let i = 0; i < 8; i++) {
+        console.log('flag: ' + i);
+        console.log(getSpriteFlag(0,'main'));
+        console.log(getSpriteFlag(0,'main', i));
     }    
 }
 
@@ -157,17 +164,6 @@ GameEnvironement.graphics.pixelPerfect = false;
 GameEnvironement.graphics.fps = 60;
 GameEnvironement.graphics.autoFitScreen = true;
 
-// create flagmap
-let mainSpriteSheetMap = [160];
-
-for(let i = 0; i < 9; i++) {
-    if(i>1) {
-        mainSpriteSheetMap[i] = Math.pow(2,i) + mainSpriteSheetMap[i-1];
-    } else {
-        mainSpriteSheetMap[i] = i;
-    }    
-}
-
-addSpriteSheet('main', './assets/spriteSheet.png', mainSpriteSheetMap); //spritesheet made by: https://opengameart.org/content/mini-roguelike-8x8-tiles
+addSpriteSheet('main', './assets/spriteSheet.png'); //spritesheet made by: https://opengameart.org/content/mini-roguelike-8x8-tiles
 
 const engine = new Engine();

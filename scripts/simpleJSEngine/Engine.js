@@ -232,7 +232,7 @@ function addSpriteSheet(spriteSheetName, path, flagData, tileSize) {
  */
 function getSpriteFlag(sprite, spriteSheetName, flag) {
     if(GameEnvironement.graphics.spriteSheets[spriteSheetName].data.flags) {
-        if(flag) {
+        if(flag >= 0) {
             return (GameEnvironement.graphics.spriteSheets[spriteSheetName].data.flags[sprite] & Math.pow(2,flag)) === Math.pow(2,flag);
         } else {
             return GameEnvironement.graphics.spriteSheets[spriteSheetName].data.flags[sprite];
@@ -240,6 +240,33 @@ function getSpriteFlag(sprite, spriteSheetName, flag) {
     } else {
         return false;
     }
+}
+
+/**
+ * Use this function to change SpriteFlags at runtime (after initialisation -> in init function, or in update)
+ * @param {number} sprite: sprite ID of the sprite which will be edited 
+ * @param {string} spriteSheetName: spritesheet ID which includes the selected Sprite
+ * @param {number} flag: [1..8] + value (bool) (set flag as value) or undefined: -> value (number) will override flag number
+ * @param {number} value: if flag is a number -> bool (new value of chosen flag), if flag is undefined -> numeric value which sumerizes all flags (0 = no flag, 256 = all 8 flags)
+ */
+function setSpriteFlag(sprite, spriteSheetName, flag, value) {
+    if(!GameEnvironement.graphics.spriteSheets[spriteSheetName].data.flags) {
+        GameEnvironement.graphics.spriteSheets[spriteSheetName].data.flags = [
+            GameEnvironement.graphics.spriteSheets[spriteSheetName].data.numSpriteX*
+            GameEnvironement.graphics.spriteSheets[spriteSheetName].data.numSpriteY
+        ]
+    }
+
+    if(flag) {
+        let actualValue = GameEnvironement.graphics.spriteSheets[spriteSheetName].data.flags[sprite];
+        if(value > 0 || value === true) {
+            GameEnvironement.graphics.spriteSheets[spriteSheetName].data.flags[sprite] = actualValue | Math.pow(2,flag);
+        } else {
+            GameEnvironement.graphics.spriteSheets[spriteSheetName].data.flags[sprite] = actualValue & (256-Math.pow(2,flag));
+        }        
+    } else {
+        GameEnvironement.graphics.spriteSheets[spriteSheetName].data.flags[sprite] = value;
+    }    
 }
 
 /**
