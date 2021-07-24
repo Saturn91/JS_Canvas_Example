@@ -217,21 +217,21 @@ class CanvasHandler {
         this.canvas.height = windowHeight;
     }
 
-    setBackgroundColor(col) {
-        this.canvas.style.background = Colors[col].color;
+    setBackgroundColor(color) {
+        this.canvas.style.background = color;
     }
 
-    setColor(colorNum) {
-        this.ctx.fillStyle = Colors[colorNum].color;
-        this.ctx.strokeSytle = Colors[colorNum].color;
+    setColor(color) {
+        this.ctx.fillStyle = color;
+        this.ctx.strokeSytle = color;
     }
 
     cls() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
-    fillRect(x, y, w, h, col) {
-        this.ctx.fillStyle = Colors[col].color;
+    fillRect(x, y, w, h, color) {
+        this.ctx.fillStyle = color;
         this.ctx.fillRect(Math.round(x),Math.round(y),w,h);
     }
 
@@ -288,8 +288,8 @@ class CanvasHandler {
         }
     }
 
-    drawText(text, x, y, colorNum, maxWidth) {
-        this.ctx.fillStyle = Colors[colorNum].color;
+    drawText(text, x, y, color, maxWidth) {
+        this.ctx.fillStyle = color;
         this.ctx.fillText(text, x, y, maxWidth)
     }
 

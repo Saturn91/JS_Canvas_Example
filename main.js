@@ -19,7 +19,7 @@ function DrawGame(canvasHandler) {
 
     player.draw(canvasHandler);
 
-    canvasHandler.drawText("fps: " + Math.round(GameEnvironement.properties.actual_fps), 2, 7, 1, 100)
+    canvasHandler.drawText("fps: " + Math.round(GameEnvironement.properties.actual_fps), 5, 14, '#ffffff', 100);
 }
 
 GameEnvironement.gameName = 'An Adventure!';
