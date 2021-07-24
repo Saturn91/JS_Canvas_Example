@@ -91,18 +91,7 @@ class Player {
         let right = GameEnvironement.input.cmdDown['right'];
         let left = GameEnvironement.input.cmdDown['left'];
 
-        this.actualAnimation = 'idle'
-
-        if((right &! left) || (left &! right)) {
-            if(right) {
-                this.x += this.speed * deltaTime/1000;
-                this.actualAnimation = 'walk_right';
-            }
-            if(left) {
-                this.x -= this.speed * deltaTime/1000;
-                this.actualAnimation = 'walk_left';
-            }
-        }
+        this.actualAnimation = 'idle'        
 
         let up = GameEnvironement.input.cmdDown['up'];
         let down = GameEnvironement.input.cmdDown['down'];
@@ -114,6 +103,17 @@ class Player {
             if(down) {
                 this.y += this.speed * deltaTime/1000;
                 this.actualAnimation = 'walk_down';
+            }
+        }
+
+        if((right &! left) || (left &! right)) {
+            if(right) {
+                this.x += this.speed * deltaTime/1000;
+                this.actualAnimation = 'walk_right';
+            }
+            if(left) {
+                this.x -= this.speed * deltaTime/1000;
+                this.actualAnimation = 'walk_left';
             }
         }
 
