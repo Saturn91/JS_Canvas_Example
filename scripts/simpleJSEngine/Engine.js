@@ -79,6 +79,7 @@ class Engine {
     * main Game loop calling the functions which are defined in GameEnvironement.functions (draw / update)
     */
     loop(timestamp) {
+        GameEnvironement.time = timestamp;
         let inputFPS = 120;
         if(GameEnvironement.graphics.fps < 60) {
             inputFPS = GameEnvironement.graphics.fps;
