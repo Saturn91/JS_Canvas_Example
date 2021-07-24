@@ -202,19 +202,44 @@ class Engine {
      *
      * @param {string} spriteSheetName: the id of the defined SpriteSheet
      * @param {string} path: path to sound file
+     * @param {array} flagData: array[width*height] of numbers, width: spriteSheet.with/tileSize, height: spriteSheet.height/tileSize, 0 = no flags, 1 = 1st flag true, 2 = 2nd flag true, 3 = 1st and 2nd flag true ... 256 = all 8 flags true 
      * @param {number} tileSize: (optional) default 8
      */
-function addSpriteSheet(spriteSheetName, path, tileSize) {
+function addSpriteSheet(spriteSheetName, path, flagData, tileSize) {
+
     if(!tileSize) tileSize = 8;
     GameEnvironement.graphics.spriteSheets[spriteSheetName] = {};
     GameEnvironement.graphics.spriteSheets[spriteSheetName].path = path;
     GameEnvironement.graphics.spriteSheets[spriteSheetName].data = {original: undefined, spriteSheet: undefined};
     GameEnvironement.graphics.spriteSheets[spriteSheetName].data.tileSize = tileSize;
 
+    if(flagData) {
+        GameEnvironement.graphics.spriteSheets[spriteSheetName].data.flags = flagData;
+    }
+
     GameEnvironement.graphics.spriteSheetNames ? 0 : GameEnvironement.graphics.spriteSheetNames = [];
     GameEnvironement.graphics.spriteSheetNames.push(spriteSheetName);
 
     if(!is2Component(tileSize)) console.warn('Tile size should be [1,2,4,8,16,32,64...!]: but is ' + tileSize);
+}
+
+/**
+ * Get sprite Flags of a specific Sprite within Spritesheet
+ * @param {number} sprite sprite number 
+ * @param {string} spriteSheetName id of a defined SpriteSheet
+ * @param {number} flag [1..8] or undefined (flag which gets returned) if undefined sum of all flags
+ * @returns {number} sprite flag, if flag parameter was undefined -> sum of all flags (256: all flags true), else true or false if flag enabled
+ */
+function getSpriteFlag(sprite, spriteSheetName, flag) {
+    if(GameEnvironement.graphics.spriteSheets[spriteSheetName].data.flags) {
+        if(flag) {
+            return (GameEnvironement.graphics.spriteSheets[spriteSheetName].data.flags[sprite] & Math.pow(2,flag)) === Math.pow(2,flag);
+        } else {
+            return GameEnvironement.graphics.spriteSheets[spriteSheetName].data.flags[sprite];
+        }
+    } else {
+        return false;
+    }
 }
 
 /**
