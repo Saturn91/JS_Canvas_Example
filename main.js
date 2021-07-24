@@ -80,17 +80,6 @@ function init() {
     engine.addAudio('collect', 'assets/audio/collect_coin.wav');
 
     spanCoin(); 
-    
-    setSpriteFlag(0, 'main', 0, true);
-    setSpriteFlag(0, 'main', 1, true);
-    setSpriteFlag(0, 'main', 2, true);
-    setSpriteFlag(0, 'main', 7, true);
-
-    for(let i = 0; i < 8; i++) {
-        console.log('flag: ' + i);
-        console.log(getSpriteFlag(0,'main'));
-        console.log(getSpriteFlag(0,'main', i));
-    }    
 }
 
 function collide(obj1, obj2) {
@@ -144,9 +133,6 @@ function DrawGame(canvasHandler) {
     canvasHandler.cls();
 
     canvasHandler.drawMap('main-map', 0, 0);
-    canvasHandler.drawSprite(20, 'main', 20, 20, true)
-    canvasHandler.drawSprite(20, 'main', 20, 28, false)
-    canvasHandler.drawSprite(20, 'main', 28, 20, false, true)
 
     drawObject(canvasHandler, player);
     drawObject(canvasHandler, coin);
