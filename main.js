@@ -132,8 +132,7 @@ function drawObject(canvasHandler, object) {
 function DrawGame(canvasHandler) {
     canvasHandler.cls();
 
-    canvasHandler.drawMap('main-map', 0, 0, 4*8, 4*8, 0, 0, 2*8, 2*8);
-    canvasHandler.drawMap('main-map', 0, 4*8, 4*8, 4*8, 8, undefined, 8*8, undefined);
+    canvasHandler.drawMap('main-map', 0, 0);
     drawObject(canvasHandler, player);
     drawObject(canvasHandler, coin);
 
