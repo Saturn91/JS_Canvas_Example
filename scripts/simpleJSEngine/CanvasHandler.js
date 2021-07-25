@@ -301,10 +301,39 @@ class CanvasHandler {
         this.draw_function = draw_function;
     }  
     
-    drawMap(mapName, screenX, screenY, mapWidth, mapHeight) {
+    /**
+     * 
+     * @param {string} mapName: map id of an already defined map 
+     * @param {number} screenX: Location on screenX
+     * @param {number} screenY: Location on ScreenY
+     * @param {number} mapWidthInPixel: (optional) how many pixels of the map to draw in X (default: map-width)
+     * @param {number} mapHeightInPixel: (optional) how many pixels of the map to draw in Y (default: map-height)
+     * @param {number} mapTextureOffsetInPixelX: (optional) startPixels in X of the offset of the selected subMap (default 0)
+     * @param {number} mapTextureOffsetInPixelY: (optional) startPixels in y of the offset of the selected subMap (default 0)
+     * @param {number} targetSizeX: (optional) drawingSize in X of the selected suMap (use this to stretch image) (default mapWidthInPixels)
+     * @param {number} targetSizeY: (optional) drawingSize in Y of the selected suMap (use this to stretch image) (default mapHeightInPixels)
+     */
+    drawMap(mapName, screenX, screenY, mapWidthInPixel, mapHeightInPixel, mapTextureOffsetInPixelX, mapTextureOffsetInPixelY, targetSizeX, targetSizeY) {
+
+        let map = GameEnvironement.graphics.maps[mapName];
+        let tileSize = GameEnvironement.graphics.spriteSheets[map.spriteSheetName].data.tileSize
+
+        if(!mapWidthInPixel) mapWidthInPixel = map.mapData[0].length*tileSize
+        if(!mapHeightInPixel) mapHeightInPixel = map.mapData.length*tileSize
+        if(!mapTextureOffsetInPixelX) mapTextureOffsetInPixelX = 0;
+        if(!mapTextureOffsetInPixelY) mapTextureOffsetInPixelY = 0;
+        if(!targetSizeX) targetSizeX = mapWidthInPixel;
+        if(!targetSizeY) targetSizeY = mapHeightInPixel;
+
         this.ctx.drawImage(
-            GameEnvironement.graphics.maps[mapName].texture,
+            map.texture,
+            mapTextureOffsetInPixelX,
+            mapTextureOffsetInPixelY,            
+            mapWidthInPixel,
+            mapHeightInPixel,
             screenX,
-            screenY);
+            screenY,
+            targetSizeX,
+            targetSizeY);
     }
 }
