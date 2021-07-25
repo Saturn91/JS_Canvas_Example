@@ -148,7 +148,6 @@ class Engine {
      */
     addMap(mapName, spriteSheetName, mapData) {
         GameEnvironement.internaly.canvas.loadMapAsResource(mapName, mapData, spriteSheetName);
-        
     }
 
     /**

@@ -1,9 +1,9 @@
-let map = [];
-
 let player;
+let map;
 
 function init() {
     player = new Player();
+    map = new MapManager();
 }
 
 function UpdateGame(deltaTime) {
@@ -18,6 +18,7 @@ function DrawGame(canvasHandler) {
     canvasHandler.cls();
 
     player.draw(canvasHandler);
+    map.draw(canvasHandler);
 
     canvasHandler.drawText("fps: " + Math.round(GameEnvironement.properties.actual_fps), 2, 7, '#ffffff', 100);
 }
@@ -35,6 +36,6 @@ GameEnvironement.graphics.resolutionX = 200;
 GameEnvironement.graphics.resolutionY = 150;
 GameEnvironement.graphics.clearColor = '#00E436';
 
-addSpriteSheet('char1_sprites', './assets/char_1_sheet.png', undefined, 16);
+initSpriteSheets();
 
 const engine = new Engine();
