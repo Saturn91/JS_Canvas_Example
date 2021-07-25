@@ -22,12 +22,6 @@ class MapManager {
      */
     initObject(objectName, objectSpriteSheet, startSpriteX, startSpriteY, tilesInX, tilesInY) {
         let objectMap = [tilesInY];
-        /*for(let y = 0; y < tilesInY; y++) {
-            objectMap[y] = [tilesInX];
-            for(let x = 0; x < tilesInX; x++) {
-                objectMap[y][x] = y*tilesInX + x + ((y+1)*startSpriteX);
-            }
-        }*/
 
         for(let y = startSpriteY; y < startSpriteY + tilesInY; y++) {
             objectMap[y] = [tilesInX];
