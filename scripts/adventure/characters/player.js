@@ -2,8 +2,8 @@ class Player {
     constructor() {
         this.x = GameEnvironement.graphics.resolutionX/2 - 8;
         this.y = GameEnvironement.graphics.resolutionY/2 - 8;
-        this.w = 8;
-        this.h = 8;
+        this.width = 8;
+        this.height = 16;
         this.speed = 40;
         this.sprite = 4;
         this.animations = {};

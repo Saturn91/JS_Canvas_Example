@@ -1,14 +1,23 @@
 class MapManager {
     constructor() {
-        this.initMaps();
+        this.objects = [];
+        this.initMaps();        
     }
 
-    update(timeDelta) {
-
+    drawInFrontOfPlayer(canvasHandler, player) {
+        this.objects.forEach(object => {
+            if(object.y + object.height >= player.y+player.height) {
+                object.draw(canvasHandler);
+            }
+        });
     }
 
-    draw(canvasHandler) {
-        canvasHandler.drawMap('tree1', 10, 40);
+    drawBehindPlayer(canvasHandler, player) {
+        this.objects.forEach(object => {
+            if(object.y + object.height < player.y+player.height) {
+                object.draw(canvasHandler);
+            }
+        });
     }
 
     /**
@@ -36,5 +45,10 @@ class MapManager {
 
     initMaps() {
         this.initObject('tree1', 'tree1', 0, 0, 4, 5);
+        let tree = new MapObject(20,40,4*16,5*16);
+        tree.setDraw((canvasHandler, x, y) => {
+            canvasHandler.drawMap('tree1', x, y);
+        })
+        this.objects.push(tree);
     }
 }
