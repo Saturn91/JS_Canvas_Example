@@ -1,13 +1,19 @@
 function init() {
     //put your initial code here
+    console.log('initialize');
 }
 
 function UpdateGame(deltaTime) {
     //put your update calls here (gets called 60 times per second)
+    
+    if(GameEnvironement.input.cmdsUp['fire1']){
+        alert('clicked on: ' + GameEnvironement.input.mousePosition.x + ":" +  GameEnvironement.input.mousePosition.y);
+    }
 }
 
 function DrawGame(canvasHandler) {
     //put your draw calls (draw objects on screen) here (gets called 60 times per second after update)
+    
 }
 
 /* Settings */
@@ -23,6 +29,8 @@ GameEnvironement.gameName = 'Your Game Name';
 //GameEnvironement.resolutionY = 128;
 
 // connect above functions with engine
+
+GameEnvironement.properties.debug = true;
 
 GameEnvironement.functions.update = UpdateGame;
 GameEnvironement.functions.draw = DrawGame;
