@@ -64,6 +64,7 @@ const GameEnvironement = {
 
 class Engine {
     constructor() {
+        GameEnvironement.internaly.engine = this;
         new CanvasHandler(GameEnvironement.canvasID, GameEnvironement.graphics.windowWidth, GameEnvironement.graphics.windowHeight)
         GameEnvironement.loop = this.loop;
         if(GameEnvironement.graphics.fps > 60) {
@@ -72,9 +73,7 @@ class Engine {
         setTimeout(this.waitForInitialization(), 100);
 
         document.getElementById('game-name').innerText = GameEnvironement.gameName;
-        document.title = GameEnvironement.gameName;
-
-        GameEnvironement.internaly.engine = this;
+        document.title = GameEnvironement.gameName;        
     }
 
     /**

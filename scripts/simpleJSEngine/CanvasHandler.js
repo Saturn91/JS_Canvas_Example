@@ -25,9 +25,15 @@ class CanvasHandler {
 
         if(GameEnvironement.properties.debug) console.log(`Canvas: [${this.windowWidth}x${this.windowHeight}] initialized!`);
         GameEnvironement.internaly.canvas = this;
-        GameEnvironement.internaly.canvas.loadResources(() => {
+
+        if(GameEnvironement.graphics.spriteSheetNames) {
+            GameEnvironement.internaly.canvas.loadResources(() => {
+                GameEnvironement.initialized.canvas = true;
+            })
+        } else {
             GameEnvironement.initialized.canvas = true;
-        })
+        }
+        
     }
 
     resizeCanvas(canvas) {
@@ -61,6 +67,8 @@ class CanvasHandler {
     }
 
     loadSpriteSheet(callBack) {  
+        if(!GameEnvironement.graphics.spriteSheetNames) return
+        
         GameEnvironement.graphics.ready = GameEnvironement.graphics.spriteSheetNames.length;
 
         for(let i = 0; i < GameEnvironement.graphics.spriteSheetNames.length; i++) {
