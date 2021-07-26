@@ -123,6 +123,12 @@ function UpdateGame(deltaTime) {
 
         player.score += 1;
     }
+
+    if(GameEnvironement.input.cmdDown['fire1']){
+        if(collide(player, {x: GameEnvironement.input.mousePosition.x, y: GameEnvironement.input.mousePosition.y, w:1, h:1})){
+            console.log('clicked on player!');
+        }
+    }
 }
 
 function drawObject(canvasHandler, object) {
