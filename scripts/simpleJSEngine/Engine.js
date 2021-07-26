@@ -72,7 +72,8 @@ class Engine {
         }
         setTimeout(this.waitForInitialization(), 100);
 
-        document.getElementById('game-name').innerText = GameEnvironement.gameName;
+        let title = document.getElementById('game-name');
+        if(title) title.innerText = GameEnvironement.gameName;
         document.title = GameEnvironement.gameName;        
     }
 
