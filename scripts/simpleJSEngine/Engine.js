@@ -13,6 +13,7 @@ const GameEnvironement = {
         autoFitScreen: false,
         resolutionX: 160,
         resolutionY: 128,
+        scale: 1,
         fps: 60,
         clearColor: '#000000',
         pixelPerfect: false,
@@ -37,8 +38,10 @@ const GameEnvironement = {
             {name: 'down', keys: ['s', 'ArrowDown']},
             {name: 'left', keys: ['a', 'ArrowLeft']},
             {name: 'jump', keys: [' ', 'x']},
-            {name: 'fire', keys: ['c']}
+            {name: 'fire1', keys: ['c', 'mouseLeft']},
+            {name: 'fire2', keys: ['y', 'mouseRight']}
         ],
+        mousePosition: {x: 0, y: 0},
         cmdsUp: {},
         keyMap: {},
         cmdDown: {}
@@ -279,10 +282,13 @@ function updateControls() {
         let value = false;
         for(let j = 0; j < GameEnvironement.input.cmdsOnKeys[i].keys.length; j++) {
             value = GameEnvironement.input.keyMap[GameEnvironement.input.cmdsOnKeys[i].keys[j]] || value;
-        }
+        }        
         GameEnvironement.input.cmdDown[GameEnvironement.input.cmdsOnKeys[i].name] = value;
         oldValue &! value ? GameEnvironement.input.cmdsUp[GameEnvironement.input.cmdsOnKeys[i].name] = true: GameEnvironement.input.cmdsUp[GameEnvironement.input.cmdsOnKeys[i].name] = false;
     }
+
+    GameEnvironement.input.keyMap['mouseLeft'] = false;
+    GameEnvironement.input.keyMap['mouseRight'] = false;
 }
 
 /**
@@ -290,6 +296,13 @@ function updateControls() {
 */
 onkeydown = onkeyup = function(e){
     GameEnvironement.input.keyMap[e.key] = e.type == 'keydown';
+}
+/**
+ * !!engine internal do not call!!
+ */
+function onMouseMove(e) {
+    GameEnvironement.input.mousePosition.x = (e.pageX - this.offsetLeft) / GameEnvironement.graphics.scale; 
+    GameEnvironement.input.mousePosition.y = (e.pageY - this.offsetTop) / GameEnvironement.graphics.scale; 
 }
 
 /**
@@ -304,6 +317,17 @@ function SetupControls() {
 
     document.addEventListener('keyup', (e) => {
         onkeyup(e);
+    });
+
+    GameEnvironement.internaly.canvas.canvas.onmousemove = onMouseMove;
+
+    GameEnvironement.internaly.canvas.canvas.addEventListener('click', (e) => {
+        GameEnvironement.input.keyMap['mouseLeft'] = true;
+    });
+
+    GameEnvironement.internaly.canvas.canvas.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        GameEnvironement.input.keyMap['mouseRight'] = true;
     });
 }
 

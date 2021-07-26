@@ -36,13 +36,13 @@ class CanvasHandler {
 
         if(GameEnvironement.graphics.autoFitScreen) {
             if (window.innerWidth > window.innerHeight) {
-                let scale = Math.round((window.innerHeight-200)/GameEnvironement.graphics.resolutionY);
-                GameEnvironement.graphics.windowHeight = scale * GameEnvironement.graphics.resolutionY
-                GameEnvironement.graphics.windowWidth = scale * GameEnvironement.graphics.resolutionX
+                GameEnvironement.graphics.scale = Math.round((window.innerHeight-200)/GameEnvironement.graphics.resolutionY);
+                GameEnvironement.graphics.windowHeight = GameEnvironement.graphics.scale * GameEnvironement.graphics.resolutionY
+                GameEnvironement.graphics.windowWidth = GameEnvironement.graphics.scale * GameEnvironement.graphics.resolutionX
             } else {
-                let scale = Math.round((window.innerWidth-50)/GameEnvironement.graphics.resolutionX);
-                GameEnvironement.graphics.windowHeight = scale * GameEnvironement.graphics.resolutionY
-                GameEnvironement.graphics.windowWidth = scale * GameEnvironement.graphics.resolutionX
+                GameEnvironement.graphics.scale = Math.round((window.innerWidth-50)/GameEnvironement.graphics.resolutionX);
+                GameEnvironement.graphics.windowHeight = GameEnvironement.graphics.scale * GameEnvironement.graphics.resolutionY
+                GameEnvironement.graphics.windowWidth = GameEnvironement.graphics.scale * GameEnvironement.graphics.resolutionX
             }
         }
 
