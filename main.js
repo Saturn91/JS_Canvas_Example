@@ -19,7 +19,7 @@ function DrawGame(canvasHandler) {
 
     map.drawBehindPlayer(canvasHandler, player);
     player.draw(canvasHandler);
-    map.drawInFrontOfPlayer(canvasHandler, player);    
+    map.drawInFrontOfPlayer(canvasHandler, player);
 
     canvasHandler.drawText("fps: " + Math.round(GameEnvironement.properties.actual_fps), 2, 7, '#ffffff', 100);
 }
