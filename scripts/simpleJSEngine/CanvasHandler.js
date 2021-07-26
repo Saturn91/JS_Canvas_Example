@@ -25,9 +25,15 @@ class CanvasHandler {
 
         if(GameEnvironement.properties.debug) console.log(`Canvas: [${this.windowWidth}x${this.windowHeight}] initialized!`);
         GameEnvironement.internaly.canvas = this;
-        GameEnvironement.internaly.canvas.loadResources(() => {
+
+        if(GameEnvironement.graphics.spriteSheetNames) {
+            GameEnvironement.internaly.canvas.loadResources(() => {
+                GameEnvironement.initialized.canvas = true;
+            })
+        } else {
             GameEnvironement.initialized.canvas = true;
-        })
+        }
+        
     }
 
     resizeCanvas(canvas) {

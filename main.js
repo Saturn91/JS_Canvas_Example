@@ -5,10 +5,6 @@ function init() {
 
 function UpdateGame(deltaTime) {
     //put your update calls here (gets called 60 times per second)
-    
-    if(GameEnvironement.input.cmdsUp['fire1']){
-        alert('clicked on: ' + GameEnvironement.input.mousePosition.x + ":" +  GameEnvironement.input.mousePosition.y);
-    }
 }
 
 function DrawGame(canvasHandler) {
