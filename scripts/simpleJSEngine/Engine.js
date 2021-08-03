@@ -49,6 +49,7 @@ const GameEnvironement = {
 
     properties: {
         debug: false,
+        debugMsg: undefined,
         actual_fps: 0,
         fps_update_rate_ms: 1000,
         last_fps_update: 0
@@ -72,7 +73,8 @@ class Engine {
         }
         setTimeout(this.waitForInitialization(), 100);
 
-        document.getElementById('game-name').innerText = GameEnvironement.gameName;
+        let title = document.getElementById('game-name');
+        if(title) title.innerText = GameEnvironement.gameName;
         document.title = GameEnvironement.gameName;        
     }
 
@@ -149,8 +151,7 @@ class Engine {
      * @return {void} creates map Object in GameEnvironement
      */
     addMap(mapName, spriteSheetName, mapData) {
-        GameEnvironement.internaly.canvas.loadMapAsResource(mapName, mapData, spriteSheetName);
-        
+        GameEnvironement.internaly.canvas.loadMapAsResource(mapName, mapData, spriteSheetName);        
     }
 
     /**
@@ -165,7 +166,7 @@ class Engine {
         let ctx = GameEnvironement.graphics.maps[mapName].texture.getContext('2d');
         let spriteSheetName = GameEnvironement.graphics.maps[mapName].spriteSheetName;
         let tileSize = GameEnvironement.graphics.spriteSheets[spriteSheetName].data.tileSize;
-        console.log(mapName + ": " + " set " + x + "," + y + " to "+ sprite);
+        
         ctx.clearRect(x*tileSize, y*tileSize, tileSize, tileSize);        
 
         if (sprite >= 0) {
@@ -343,6 +344,9 @@ function debug(msg, component, type) {
         component = 'unknown Component!';
     }
     let output = component + ': ' + msg;
+
+    if(GameEnvironement.properties.debugMsg) GameEnvironement.properties.debugMsg(output, type);
+
     if(!type && GameEnvironement.properties.debug)
     {
         console.log(output);
@@ -350,12 +354,15 @@ function debug(msg, component, type) {
     } 
     if(type==='warning') {
         console.warn(output);
+        
         return
     }
     if(type==='error') {
         console.error(output);
         return
     }
+
+    
 }
 
 /**
