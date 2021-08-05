@@ -322,6 +322,11 @@ function SetupControls() {
 
     GameEnvironement.internaly.canvas.canvas.onmousemove = onMouseMove;
 
+    GameEnvironement.internaly.canvas.canvas.addEventListener('mouseleave', e => {
+        GameEnvironement.input.mousePosition.x = -1; 
+        GameEnvironement.input.mousePosition.y = -1; 
+    });
+
     GameEnvironement.internaly.canvas.canvas.addEventListener('click', (e) => {
         GameEnvironement.input.keyMap['mouseLeft'] = true;
     });
