@@ -1,19 +1,31 @@
-let lastTitle = undefined;
-let testRuns = 0;
-let passedTests = 0;
-let failedTests = 0;
-
-let runAllTestsComplete = true;
-
-let summaryLine = document.getElementById('summary');
+TEST_SUITE = {
+    lastTitle : {
+        element: undefined,
+        text: ''
+    },
+    runAllTestsComplete : true,
+    runs_total : {
+        testRuns : 0,
+        passedTests : 0,
+        failedTests : 0
+    },
+    runs_scope : {
+        testRuns : 0,
+        passedTests : 0,
+        failedTests : 0
+    },
+    summaryLine : document.getElementById('summary')
+};
 
 function testTitle(title) {
-    var titleElement = document.createElement("h2");
-    titleElement.innerText = title;
-    titleElement.classList.add('green');
-    titleElement.classList.add('test-title')
-    document.body.appendChild(titleElement);
-    lastTitle = titleElement;
+    TEST_SUITE.lastTitle.element = document.createElement("h2");
+    TEST_SUITE.lastTitle.text = title;
+    TEST_SUITE.lastTitle.element.classList.add('green');
+    TEST_SUITE.lastTitle.element.classList.add('test-title')
+    document.body.appendChild(TEST_SUITE.lastTitle.element);
+    TEST_SUITE.runs_scope.testRuns = 0;
+    TEST_SUITE.runs_scope.passedTests = 0;
+    TEST_SUITE.runs_scope.failedTests = 0;
 }
 
 function testResultLine(string, passed) {
@@ -22,12 +34,12 @@ function testResultLine(string, passed) {
     let cssText = '';
     passed ? cssText = 'green' : cssText = 'red';
 
-    if(lastTitle) {
-        if(!lastTitle.classList.contains(cssText)) {
-            lastTitle.classList.remove('green');
-            lastTitle.classList.add(cssText);
-            summaryLine.classList.remove('light-green');
-            summaryLine.classList.add('red');
+    if(TEST_SUITE.lastTitle.element) {
+        if(!TEST_SUITE.lastTitle.element.classList.contains(cssText)) {
+            TEST_SUITE.lastTitle.element.classList.remove('green');
+            TEST_SUITE.lastTitle.element.classList.add(cssText);
+            TEST_SUITE.summaryLine.classList.remove('light-green');
+            TEST_SUITE.summaryLine.classList.add('red');
         }
     }
 
@@ -37,13 +49,22 @@ function testResultLine(string, passed) {
 }
 
 function assert(testDescription, test, expection) {
-    testRuns ++;
+    TEST_SUITE.runs_total.testRuns ++;
+    TEST_SUITE.runs_scope.testRuns ++;
     let passed = test == expection;
-    passed ? passedTests ++ : failedTests++;
-    if(!passed || runAllTestsComplete) {
+    if(passed){
+        TEST_SUITE.runs_total.passedTests ++;
+        TEST_SUITE.runs_scope.passedTests ++;
+    } else {
+        TEST_SUITE.runs_total.failedTests++;
+        TEST_SUITE.runs_scope.failedTests++;
+        console.error(testDescription + ' -> failed')
+    }  
+    if(!passed || TEST_SUITE.runAllTestsComplete) {
         testResultLine(testDescription, passed);
-    }    
-    summaryLine.innerText = `${testRuns} tests ran, ${passedTests}/${testRuns} passed, ${failedTests}/${testRuns} failed`
+    }   
+    TEST_SUITE.lastTitle.element.innerText = TEST_SUITE.lastTitle.text +  `: ${TEST_SUITE.runs_scope.testRuns} tests ran, ${TEST_SUITE.runs_scope.passedTests}/${TEST_SUITE.runs_scope.testRuns} passed, ${TEST_SUITE.runs_scope.failedTests} failed` 
+    TEST_SUITE.summaryLine.innerText =                                      `${TEST_SUITE.runs_total.testRuns} tests ran, ${TEST_SUITE.runs_total.passedTests}/${TEST_SUITE.runs_total.testRuns} passed, ${TEST_SUITE.runs_total.failedTests} failed`
 }
 
 document.getElementById('rerun-test-btn').addEventListener('click', () => {

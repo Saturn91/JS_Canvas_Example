@@ -65,8 +65,8 @@ const GameEnvironement = {
 
 class Engine {
     constructor() {
-        GameEnvironement.internaly.engine = this;
-        new CanvasHandler(GameEnvironement.canvasID, GameEnvironement.graphics.windowWidth, GameEnvironement.graphics.windowHeight)
+        GameEnvironement.internaly.engine = this;        
+        new Renderer(new CanvasHandler(GameEnvironement.canvasID, GameEnvironement.graphics.windowWidth, GameEnvironement.graphics.windowHeight));
         GameEnvironement.loop = this.loop;
         if(GameEnvironement.graphics.fps > 60) {
             console.warn('60 fps is the maximal value possible [' + GameEnvironement.graphics.fps + "] gets clamped to 60!");
@@ -93,7 +93,7 @@ class Engine {
             let timeDelta = timestamp - GameEnvironement.internaly.lastUpdate
             if(GameEnvironement.functions.update) GameEnvironement.functions.update(timeDelta)
             GameEnvironement.internaly.canvas.ctx.save();
-            if(GameEnvironement.functions.draw) GameEnvironement.functions.draw(GameEnvironement.internaly.canvas)
+            if(GameEnvironement.functions.draw) GameEnvironement.functions.draw(GameEnvironement.internaly.renderer)
             GameEnvironement.internaly.canvas.ctx.restore();
             GameEnvironement.internaly.lastUpdate = timestamp
 

@@ -328,18 +328,7 @@ class CanvasHandler {
      * @param {number} targetSizeX: (optional) drawingSize in X of the selected suMap (use this to stretch image) (default mapWidthInPixels)
      * @param {number} targetSizeY: (optional) drawingSize in Y of the selected suMap (use this to stretch image) (default mapHeightInPixels)
      */
-    drawMap(mapName, screenX, screenY, mapWidthInPixel, mapHeightInPixel, mapTextureOffsetInPixelX, mapTextureOffsetInPixelY, targetSizeX, targetSizeY) {
-
-        let map = GameEnvironement.graphics.maps[mapName];
-        let tileSize = GameEnvironement.graphics.spriteSheets[map.spriteSheetName].data.tileSize
-
-        if(!mapWidthInPixel) mapWidthInPixel = map.mapData[0].length*tileSize
-        if(!mapHeightInPixel) mapHeightInPixel = map.mapData.length*tileSize
-        if(!mapTextureOffsetInPixelX) mapTextureOffsetInPixelX = 0;
-        if(!mapTextureOffsetInPixelY) mapTextureOffsetInPixelY = 0;
-        if(!targetSizeX) targetSizeX = mapWidthInPixel;
-        if(!targetSizeY) targetSizeY = mapHeightInPixel;
-
+    drawMap(screenX, screenY, mapWidthInPixel, mapHeightInPixel, mapTextureOffsetInPixelX, mapTextureOffsetInPixelY, targetSizeX, targetSizeY) {
         this.ctx.drawImage(
             map.texture,
             mapTextureOffsetInPixelX,
