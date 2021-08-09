@@ -13,8 +13,9 @@ const GameEnvironement = {
         autoFitScreen: false,
         resolutionX: 160,
         resolutionY: 128,
+        scale: 1,
         fps: 60,
-        clearColor: 0,
+        clearColor: '#000000',
         pixelPerfect: false,
         maps: {},
         spriteSheets: {}
@@ -37,8 +38,10 @@ const GameEnvironement = {
             {name: 'down', keys: ['s', 'ArrowDown']},
             {name: 'left', keys: ['a', 'ArrowLeft']},
             {name: 'jump', keys: [' ', 'x']},
-            {name: 'fire', keys: ['c']}
+            {name: 'fire1', keys: ['c', 'mouseLeft']},
+            {name: 'fire2', keys: ['y', 'mouseRight']}
         ],
+        mousePosition: {x: 0, y: 0},
         cmdsUp: {},
         keyMap: {},
         cmdDown: {}
@@ -46,6 +49,7 @@ const GameEnvironement = {
 
     properties: {
         debug: false,
+        debugMsg: undefined,
         actual_fps: 0,
         fps_update_rate_ms: 1000,
         last_fps_update: 0
@@ -61,17 +65,17 @@ const GameEnvironement = {
 
 class Engine {
     constructor() {
-        new CanvasHandler(GameEnvironement.canvasID, GameEnvironement.graphics.windowWidth, GameEnvironement.graphics.windowHeight)
+        GameEnvironement.internaly.engine = this;        
+        new Renderer(new CanvasHandler(GameEnvironement.canvasID, GameEnvironement.graphics.windowWidth, GameEnvironement.graphics.windowHeight));
         GameEnvironement.loop = this.loop;
         if(GameEnvironement.graphics.fps > 60) {
             console.warn('60 fps is the maximal value possible [' + GameEnvironement.graphics.fps + "] gets clamped to 60!");
         }
         setTimeout(this.waitForInitialization(), 100);
 
-        document.getElementById('game-name').innerText = GameEnvironement.gameName;
-        document.title = GameEnvironement.gameName;
-
-        GameEnvironement.internaly.engine = this;
+        let title = document.getElementById('game-name');
+        if(title) title.innerText = GameEnvironement.gameName;
+        document.title = GameEnvironement.gameName;        
     }
 
     /**
@@ -79,6 +83,7 @@ class Engine {
     * main Game loop calling the functions which are defined in GameEnvironement.functions (draw / update)
     */
     loop(timestamp) {
+        GameEnvironement.time = timestamp;
         let inputFPS = 120;
         if(GameEnvironement.graphics.fps < 60) {
             inputFPS = GameEnvironement.graphics.fps;
@@ -88,7 +93,7 @@ class Engine {
             let timeDelta = timestamp - GameEnvironement.internaly.lastUpdate
             if(GameEnvironement.functions.update) GameEnvironement.functions.update(timeDelta)
             GameEnvironement.internaly.canvas.ctx.save();
-            if(GameEnvironement.functions.draw) GameEnvironement.functions.draw(GameEnvironement.internaly.canvas)
+            if(GameEnvironement.functions.draw) GameEnvironement.functions.draw(GameEnvironement.internaly.renderer)
             GameEnvironement.internaly.canvas.ctx.restore();
             GameEnvironement.internaly.lastUpdate = timestamp
 
@@ -146,8 +151,7 @@ class Engine {
      * @return {void} creates map Object in GameEnvironement
      */
     addMap(mapName, spriteSheetName, mapData) {
-        GameEnvironement.internaly.canvas.loadMapAsResource(mapName, mapData, spriteSheetName);
-        
+        GameEnvironement.internaly.canvas.loadMapAsResource(mapName, mapData, spriteSheetName);        
     }
 
     /**
@@ -162,7 +166,7 @@ class Engine {
         let ctx = GameEnvironement.graphics.maps[mapName].texture.getContext('2d');
         let spriteSheetName = GameEnvironement.graphics.maps[mapName].spriteSheetName;
         let tileSize = GameEnvironement.graphics.spriteSheets[spriteSheetName].data.tileSize;
-        console.log(mapName + ": " + " set " + x + "," + y + " to "+ sprite);
+        
         ctx.clearRect(x*tileSize, y*tileSize, tileSize, tileSize);        
 
         if (sprite >= 0) {
@@ -279,10 +283,13 @@ function updateControls() {
         let value = false;
         for(let j = 0; j < GameEnvironement.input.cmdsOnKeys[i].keys.length; j++) {
             value = GameEnvironement.input.keyMap[GameEnvironement.input.cmdsOnKeys[i].keys[j]] || value;
-        }
+        }        
         GameEnvironement.input.cmdDown[GameEnvironement.input.cmdsOnKeys[i].name] = value;
         oldValue &! value ? GameEnvironement.input.cmdsUp[GameEnvironement.input.cmdsOnKeys[i].name] = true: GameEnvironement.input.cmdsUp[GameEnvironement.input.cmdsOnKeys[i].name] = false;
     }
+
+    GameEnvironement.input.keyMap['mouseLeft'] = false;
+    GameEnvironement.input.keyMap['mouseRight'] = false;
 }
 
 /**
@@ -290,6 +297,13 @@ function updateControls() {
 */
 onkeydown = onkeyup = function(e){
     GameEnvironement.input.keyMap[e.key] = e.type == 'keydown';
+}
+/**
+ * !!engine internal do not call!!
+ */
+function onMouseMove(e) {
+    GameEnvironement.input.mousePosition.x = (e.pageX - this.offsetLeft) / GameEnvironement.graphics.scale; 
+    GameEnvironement.input.mousePosition.y = (e.pageY - this.offsetTop) / GameEnvironement.graphics.scale; 
 }
 
 /**
@@ -305,6 +319,22 @@ function SetupControls() {
     document.addEventListener('keyup', (e) => {
         onkeyup(e);
     });
+
+    GameEnvironement.internaly.canvas.canvas.onmousemove = onMouseMove;
+
+    GameEnvironement.internaly.canvas.canvas.addEventListener('mouseleave', e => {
+        GameEnvironement.input.mousePosition.x = -1; 
+        GameEnvironement.input.mousePosition.y = -1; 
+    });
+
+    GameEnvironement.internaly.canvas.canvas.addEventListener('click', (e) => {
+        GameEnvironement.input.keyMap['mouseLeft'] = true;
+    });
+
+    GameEnvironement.internaly.canvas.canvas.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        GameEnvironement.input.keyMap['mouseRight'] = true;
+    });
 }
 
 /**
@@ -319,6 +349,9 @@ function debug(msg, component, type) {
         component = 'unknown Component!';
     }
     let output = component + ': ' + msg;
+
+    if(GameEnvironement.properties.debugMsg) GameEnvironement.properties.debugMsg(output, type);
+
     if(!type && GameEnvironement.properties.debug)
     {
         console.log(output);
@@ -326,12 +359,15 @@ function debug(msg, component, type) {
     } 
     if(type==='warning') {
         console.warn(output);
+        
         return
     }
     if(type==='error') {
         console.error(output);
         return
     }
+
+    
 }
 
 /**

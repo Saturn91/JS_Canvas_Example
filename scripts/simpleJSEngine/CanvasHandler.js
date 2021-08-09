@@ -25,9 +25,15 @@ class CanvasHandler {
 
         if(GameEnvironement.properties.debug) console.log(`Canvas: [${this.windowWidth}x${this.windowHeight}] initialized!`);
         GameEnvironement.internaly.canvas = this;
-        GameEnvironement.internaly.canvas.loadResources(() => {
+
+        if(GameEnvironement.graphics.spriteSheetNames) {
+            GameEnvironement.internaly.canvas.loadResources(() => {
+                GameEnvironement.initialized.canvas = true;
+            })
+        } else {
             GameEnvironement.initialized.canvas = true;
-        })
+        }
+        
     }
 
     resizeCanvas(canvas) {
@@ -36,13 +42,13 @@ class CanvasHandler {
 
         if(GameEnvironement.graphics.autoFitScreen) {
             if (window.innerWidth > window.innerHeight) {
-                let scale = Math.round((window.innerHeight-200)/GameEnvironement.graphics.resolutionY);
-                GameEnvironement.graphics.windowHeight = scale * GameEnvironement.graphics.resolutionY
-                GameEnvironement.graphics.windowWidth = scale * GameEnvironement.graphics.resolutionX
+                GameEnvironement.graphics.scale = Math.round((window.innerHeight-200)/GameEnvironement.graphics.resolutionY);
+                GameEnvironement.graphics.windowHeight = GameEnvironement.graphics.scale * GameEnvironement.graphics.resolutionY
+                GameEnvironement.graphics.windowWidth = GameEnvironement.graphics.scale * GameEnvironement.graphics.resolutionX
             } else {
-                let scale = Math.round((window.innerWidth-50)/GameEnvironement.graphics.resolutionX);
-                GameEnvironement.graphics.windowHeight = scale * GameEnvironement.graphics.resolutionY
-                GameEnvironement.graphics.windowWidth = scale * GameEnvironement.graphics.resolutionX
+                GameEnvironement.graphics.scale = Math.round((window.innerWidth-50)/GameEnvironement.graphics.resolutionX);
+                GameEnvironement.graphics.windowHeight = GameEnvironement.graphics.scale * GameEnvironement.graphics.resolutionY
+                GameEnvironement.graphics.windowWidth = GameEnvironement.graphics.scale * GameEnvironement.graphics.resolutionX
             }
         }
 
@@ -61,6 +67,8 @@ class CanvasHandler {
     }
 
     loadSpriteSheet(callBack) {  
+        if(!GameEnvironement.graphics.spriteSheetNames) return
+        
         GameEnvironement.graphics.ready = GameEnvironement.graphics.spriteSheetNames.length;
 
         for(let i = 0; i < GameEnvironement.graphics.spriteSheetNames.length; i++) {
@@ -217,25 +225,30 @@ class CanvasHandler {
         this.canvas.height = windowHeight;
     }
 
-    setBackgroundColor(col) {
-        this.canvas.style.background = Colors[col].color;
+    setBackgroundColor(color) {
+        this.canvas.style.background = color;
     }
 
-    setColor(colorNum) {
-        this.ctx.fillStyle = Colors[colorNum].color;
-        this.ctx.strokeSytle = Colors[colorNum].color;
+    setColor(color) {
+        this.ctx.fillStyle = color;
+        this.ctx.strokeSytle = color;
     }
 
     cls() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
-    fillRect(x, y, w, h, col) {
-        this.ctx.fillStyle = Colors[col].color;
+    drawRect(x, y, w, h, color) {
+        this.ctx.strokeStyle = color;
+        this.ctx.strokeRect(Math.round(x),Math.round(y),w,h);
+    }
+
+    fillRect(x, y, w, h, color) {
+        this.ctx.fillStyle = color;
         this.ctx.fillRect(Math.round(x),Math.round(y),w,h);
     }
 
-    drawSprite(sprite, spriteSheetName, x, y, flipX, flipY) { 
+    drawSprite(sprite, spriteSheetName, x, y, flipX, flipY, targetSize) { 
         
         let xPos = x;
         let yPos = y;
@@ -245,24 +258,26 @@ class CanvasHandler {
             yPos = Math.round(y)
         }
 
-        this.drawSpriteOnContext(this.ctx, spriteSheetName, this.getSpriteData(sprite, spriteSheetName), xPos, yPos, flipX, flipY);
+        this.drawSpriteOnContext(this.ctx, spriteSheetName, this.getSpriteData(sprite, spriteSheetName), xPos, yPos, flipX, flipY, targetSize);
     }
 
-    drawSpriteOnContext(context, spriteSheetName, spriteData, x, y, flipX, flipY) {  
+    drawSpriteOnContext(context, spriteSheetName, spriteData, x, y, flipX, flipY, targetSize) {  
         let spriteSheet =  GameEnvironement.graphics.spriteSheets[spriteSheetName].data.spriteSheet;
         let xOff = spriteData.spriteOffX;
         let yOff = spriteData.spriteOffY;
         if(flipX) {
             spriteSheet = GameEnvironement.graphics.spriteSheets[spriteSheetName].data.flippedX;
-            xOff = GameEnvironement.graphics.spriteSheets[spriteSheetName].data.numSpriteX*spriteData.tileSize - (spriteData.spriteOffX - 3 * spriteData.tileSize)
+            xOff = (GameEnvironement.graphics.spriteSheets[spriteSheetName].data.numSpriteX*spriteData.tileSize + spriteData.tileSize) - (spriteData.spriteOffX + spriteData.tileSize)
 
             if(flipY) {
                 debug('flipX and flipY can not be true both...', 'CanvasHandler.drawSpriteOnContext', 'warning');
             }
         } else if(flipY) {
-            yOff = GameEnvironement.graphics.spriteSheets[spriteSheetName].data.numSpriteY*spriteData.tileSize - (spriteData.spriteOffY - 3 * spriteData.tileSize)
+            yOff = (GameEnvironement.graphics.spriteSheets[spriteSheetName].data.numSpriteY*spriteData.tileSize + spriteData.tileSize) - (spriteData.spriteOffY + spriteData.tileSize)
             spriteSheet = GameEnvironement.graphics.spriteSheets[spriteSheetName].data.flippedY;            
-        }        
+        }  
+        
+        if(!targetSize) targetSize = spriteData.tileSize;
 
         context.drawImage(
             spriteSheet,
@@ -272,8 +287,8 @@ class CanvasHandler {
             spriteData.tileSize,
             x,
             y,
-            spriteData.tileSize,
-            spriteData.tileSize);
+            targetSize,
+            targetSize);
     }
 
     getSpriteData(sprite, spriteSheetName) {
@@ -288,8 +303,8 @@ class CanvasHandler {
         }
     }
 
-    drawText(text, x, y, colorNum, maxWidth) {
-        this.ctx.fillStyle = Colors[colorNum].color;
+    drawText(text, x, y, color, maxWidth) {
+        this.ctx.fillStyle = color;
         this.ctx.fillText(text, x, y, maxWidth)
     }
 
@@ -301,10 +316,28 @@ class CanvasHandler {
         this.draw_function = draw_function;
     }  
     
-    drawMap(mapName, screenX, screenY, mapWidth, mapHeight) {
+    /**
+     * 
+     * @param {string} mapName: map id of an already defined map 
+     * @param {number} screenX: Location on screenX
+     * @param {number} screenY: Location on ScreenY
+     * @param {number} mapWidthInPixel: (optional) how many pixels of the map to draw in X (default: map-width)
+     * @param {number} mapHeightInPixel: (optional) how many pixels of the map to draw in Y (default: map-height)
+     * @param {number} mapTextureOffsetInPixelX: (optional) startPixels in X of the offset of the selected subMap (default 0)
+     * @param {number} mapTextureOffsetInPixelY: (optional) startPixels in y of the offset of the selected subMap (default 0)
+     * @param {number} targetSizeX: (optional) drawingSize in X of the selected suMap (use this to stretch image) (default mapWidthInPixels)
+     * @param {number} targetSizeY: (optional) drawingSize in Y of the selected suMap (use this to stretch image) (default mapHeightInPixels)
+     */
+    drawMap(mapName, screenX, screenY, mapWidthInPixel, mapHeightInPixel, mapTextureOffsetInPixelX, mapTextureOffsetInPixelY, targetSizeX, targetSizeY) {
         this.ctx.drawImage(
             GameEnvironement.graphics.maps[mapName].texture,
+            mapTextureOffsetInPixelX,
+            mapTextureOffsetInPixelY,            
+            mapWidthInPixel,
+            mapHeightInPixel,
             screenX,
-            screenY);
+            screenY,
+            targetSizeX,
+            targetSizeY);
     }
 }

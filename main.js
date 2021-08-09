@@ -125,20 +125,20 @@ function UpdateGame(deltaTime) {
     }
 }
 
-function drawObject(canvasHandler, object) {
-    canvasHandler.drawSprite(object.sprite, 'main',  object.x, object.y);
+function drawObject(renderer, object) {
+    renderer.drawSprite(object.sprite, 'main',  object.x, object.y);
 }
 
-function DrawGame(canvasHandler) {
-    canvasHandler.cls();
+function DrawGame(renderer) {
+    renderer.cls();
 
-    canvasHandler.drawMap('main-map', 0, 0);
+    renderer.drawMap('main-map', 0, 0);
 
-    drawObject(canvasHandler, player);
-    drawObject(canvasHandler, coin);
+    drawObject(renderer, player);
+    drawObject(renderer, coin);
 
-    canvasHandler.drawText("fps: " + Math.round(GameEnvironement.properties.actual_fps), 5, 14, 1, 100)
-    canvasHandler.drawText("score: " + player.score, 130, 14, 1, 100)
+    renderer.drawText("fps: " + Math.round(GameEnvironement.properties.actual_fps), 5, 14, 'white', 100)
+    renderer.drawText("score: " + player.score, 130, 14, 'white', 100)
     
 }
 
