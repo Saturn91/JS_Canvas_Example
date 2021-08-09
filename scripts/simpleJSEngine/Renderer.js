@@ -25,7 +25,7 @@ class Renderer {
         if(!targetSizeX) targetSizeX = mapWidthInPixel;
         if(!targetSizeY) targetSizeY = mapHeightInPixel;
 
-        if(this.areaIsOnScreen(screenX, screenY, targetSizeX, targetSizeY)) this.canvasHandler.drawMap(screenX, screenY, mapWidthInPixel, mapHeightInPixel, mapTextureOffsetInPixelX, mapTextureOffsetInPixelY, targetSizeX, targetSizeY);
+        if(this.areaIsOnScreen(screenX, screenY, targetSizeX, targetSizeY)) this.canvasHandler.drawMap(mapName, screenX, screenY, mapWidthInPixel, mapHeightInPixel, mapTextureOffsetInPixelX, mapTextureOffsetInPixelY, targetSizeX, targetSizeY);
     }
 
     drawText(text, x, y, color, maxWidth) {

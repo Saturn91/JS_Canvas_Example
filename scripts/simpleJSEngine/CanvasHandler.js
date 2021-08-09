@@ -328,9 +328,9 @@ class CanvasHandler {
      * @param {number} targetSizeX: (optional) drawingSize in X of the selected suMap (use this to stretch image) (default mapWidthInPixels)
      * @param {number} targetSizeY: (optional) drawingSize in Y of the selected suMap (use this to stretch image) (default mapHeightInPixels)
      */
-    drawMap(screenX, screenY, mapWidthInPixel, mapHeightInPixel, mapTextureOffsetInPixelX, mapTextureOffsetInPixelY, targetSizeX, targetSizeY) {
+    drawMap(mapName, screenX, screenY, mapWidthInPixel, mapHeightInPixel, mapTextureOffsetInPixelX, mapTextureOffsetInPixelY, targetSizeX, targetSizeY) {
         this.ctx.drawImage(
-            map.texture,
+            GameEnvironement.graphics.maps[mapName].texture,
             mapTextureOffsetInPixelX,
             mapTextureOffsetInPixelY,            
             mapWidthInPixel,

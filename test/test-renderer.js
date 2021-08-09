@@ -47,17 +47,17 @@ assert('test isOnArea(x,y) in bounds2', renderer.areaIsOnScreen(GameEnvironement
 assert('test isOnArea(x,y) out of bounds1', renderer.areaIsOnScreen(-0.0002,-0.0002, 0.0001, 0.0001) == false, true);
 assert('test isOnArea(x,y) out of bounds2', renderer.areaIsOnScreen(GameEnvironement.graphics.resolutionX,GameEnvironement.graphics.resolutionY, 0.0001, 0.0001) == false, true);
 
-testTitle('test renderer - render Sprite')
+testTitle('test renderer - draw Sprite')
 
-renderer.renderSprite(0, 'main', -0.0001, -0.0001);
-assert('test renderSprite if on screen draws', canvasHandler.countDraw == 1, true);
-renderer.renderSprite(0, 'main', -0.0002, -0.0002);
-assert('test renderSprite if not on screen (should ot draw)', canvasHandler.countDraw == 1, true);
+renderer.drawSprite(0, 'main', -0.0001, -0.0001);
+assert('test drawSprite if on screen draws', canvasHandler.countDraw == 1, true);
+renderer.drawSprite(0, 'main', -0.0002, -0.0002);
+assert('test drawSprite if not on screen (should ot draw)', canvasHandler.countDraw == 1, true);
 
-testTitle('test renderer - render Map')
+testTitle('test renderer - draw Map')
 
-renderer.renderMap('main', 0, 0, 0.0001, 0.0001);
-assert('test renderMap if on screen draws', canvasHandler.countDraw == 2, true);
-renderer.renderMap('main', -0.0002, -0.0002, 0.0001, 0.0001);
-assert('test renderMap if not on screen (should ot draw)', canvasHandler.countDraw == 2, true);
+renderer.drawMap('main', 0, 0, 0.0001, 0.0001);
+assert('test drawMap if on screen draws', canvasHandler.countDraw == 2, true);
+renderer.drawMap('main', -0.0002, -0.0002, 0.0001, 0.0001);
+assert('test drawMap if not on screen (should ot draw)', canvasHandler.countDraw == 2, true);
 }
