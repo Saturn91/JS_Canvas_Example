@@ -49,6 +49,7 @@ const GameEnvironement = {
 
     properties: {
         debug: false,
+        debugMsg: undefined,
         actual_fps: 0,
         fps_update_rate_ms: 1000,
         last_fps_update: 0
@@ -64,8 +65,8 @@ const GameEnvironement = {
 
 class Engine {
     constructor() {
-        GameEnvironement.internaly.engine = this;
-        new CanvasHandler(GameEnvironement.canvasID, GameEnvironement.graphics.windowWidth, GameEnvironement.graphics.windowHeight)
+        GameEnvironement.internaly.engine = this;        
+        new Renderer(new CanvasHandler(GameEnvironement.canvasID, GameEnvironement.graphics.windowWidth, GameEnvironement.graphics.windowHeight));
         GameEnvironement.loop = this.loop;
         if(GameEnvironement.graphics.fps > 60) {
             console.warn('60 fps is the maximal value possible [' + GameEnvironement.graphics.fps + "] gets clamped to 60!");
@@ -92,7 +93,7 @@ class Engine {
             let timeDelta = timestamp - GameEnvironement.internaly.lastUpdate
             if(GameEnvironement.functions.update) GameEnvironement.functions.update(timeDelta)
             GameEnvironement.internaly.canvas.ctx.save();
-            if(GameEnvironement.functions.draw) GameEnvironement.functions.draw(GameEnvironement.internaly.canvas)
+            if(GameEnvironement.functions.draw) GameEnvironement.functions.draw(GameEnvironement.internaly.renderer)
             GameEnvironement.internaly.canvas.ctx.restore();
             GameEnvironement.internaly.lastUpdate = timestamp
 
@@ -150,7 +151,7 @@ class Engine {
      * @return {void} creates map Object in GameEnvironement
      */
     addMap(mapName, spriteSheetName, mapData) {
-        GameEnvironement.internaly.canvas.loadMapAsResource(mapName, mapData, spriteSheetName);
+        GameEnvironement.internaly.canvas.loadMapAsResource(mapName, mapData, spriteSheetName);        
     }
 
     /**
@@ -165,7 +166,7 @@ class Engine {
         let ctx = GameEnvironement.graphics.maps[mapName].texture.getContext('2d');
         let spriteSheetName = GameEnvironement.graphics.maps[mapName].spriteSheetName;
         let tileSize = GameEnvironement.graphics.spriteSheets[spriteSheetName].data.tileSize;
-        console.log(mapName + ": " + " set " + x + "," + y + " to "+ sprite);
+        
         ctx.clearRect(x*tileSize, y*tileSize, tileSize, tileSize);        
 
         if (sprite >= 0) {
@@ -321,6 +322,11 @@ function SetupControls() {
 
     GameEnvironement.internaly.canvas.canvas.onmousemove = onMouseMove;
 
+    GameEnvironement.internaly.canvas.canvas.addEventListener('mouseleave', e => {
+        GameEnvironement.input.mousePosition.x = -1; 
+        GameEnvironement.input.mousePosition.y = -1; 
+    });
+
     GameEnvironement.internaly.canvas.canvas.addEventListener('click', (e) => {
         GameEnvironement.input.keyMap['mouseLeft'] = true;
     });
@@ -343,6 +349,9 @@ function debug(msg, component, type) {
         component = 'unknown Component!';
     }
     let output = component + ': ' + msg;
+
+    if(GameEnvironement.properties.debugMsg) GameEnvironement.properties.debugMsg(output, type);
+
     if(!type && GameEnvironement.properties.debug)
     {
         console.log(output);
@@ -350,12 +359,15 @@ function debug(msg, component, type) {
     } 
     if(type==='warning') {
         console.warn(output);
+        
         return
     }
     if(type==='error') {
         console.error(output);
         return
     }
+
+    
 }
 
 /**

@@ -238,12 +238,17 @@ class CanvasHandler {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
+    drawRect(x, y, w, h, color) {
+        this.ctx.strokeStyle = color;
+        this.ctx.strokeRect(Math.round(x),Math.round(y),w,h);
+    }
+
     fillRect(x, y, w, h, color) {
         this.ctx.fillStyle = color;
         this.ctx.fillRect(Math.round(x),Math.round(y),w,h);
     }
 
-    drawSprite(sprite, spriteSheetName, x, y, flipX, flipY) { 
+    drawSprite(sprite, spriteSheetName, x, y, flipX, flipY, targetSize) { 
         
         let xPos = x;
         let yPos = y;
@@ -253,10 +258,10 @@ class CanvasHandler {
             yPos = Math.round(y)
         }
 
-        this.drawSpriteOnContext(this.ctx, spriteSheetName, this.getSpriteData(sprite, spriteSheetName), xPos, yPos, flipX, flipY);
+        this.drawSpriteOnContext(this.ctx, spriteSheetName, this.getSpriteData(sprite, spriteSheetName), xPos, yPos, flipX, flipY, targetSize);
     }
 
-    drawSpriteOnContext(context, spriteSheetName, spriteData, x, y, flipX, flipY) {  
+    drawSpriteOnContext(context, spriteSheetName, spriteData, x, y, flipX, flipY, targetSize) {  
         let spriteSheet =  GameEnvironement.graphics.spriteSheets[spriteSheetName].data.spriteSheet;
         let xOff = spriteData.spriteOffX;
         let yOff = spriteData.spriteOffY;
@@ -270,7 +275,9 @@ class CanvasHandler {
         } else if(flipY) {
             yOff = (GameEnvironement.graphics.spriteSheets[spriteSheetName].data.numSpriteY*spriteData.tileSize + spriteData.tileSize) - (spriteData.spriteOffY + spriteData.tileSize)
             spriteSheet = GameEnvironement.graphics.spriteSheets[spriteSheetName].data.flippedY;            
-        }        
+        }  
+        
+        if(!targetSize) targetSize = spriteData.tileSize;
 
         context.drawImage(
             spriteSheet,
@@ -280,8 +287,8 @@ class CanvasHandler {
             spriteData.tileSize,
             x,
             y,
-            spriteData.tileSize,
-            spriteData.tileSize);
+            targetSize,
+            targetSize);
     }
 
     getSpriteData(sprite, spriteSheetName) {
@@ -322,19 +329,8 @@ class CanvasHandler {
      * @param {number} targetSizeY: (optional) drawingSize in Y of the selected suMap (use this to stretch image) (default mapHeightInPixels)
      */
     drawMap(mapName, screenX, screenY, mapWidthInPixel, mapHeightInPixel, mapTextureOffsetInPixelX, mapTextureOffsetInPixelY, targetSizeX, targetSizeY) {
-
-        let map = GameEnvironement.graphics.maps[mapName];
-        let tileSize = GameEnvironement.graphics.spriteSheets[map.spriteSheetName].data.tileSize
-
-        if(!mapWidthInPixel) mapWidthInPixel = map.mapData[0].length*tileSize
-        if(!mapHeightInPixel) mapHeightInPixel = map.mapData.length*tileSize
-        if(!mapTextureOffsetInPixelX) mapTextureOffsetInPixelX = 0;
-        if(!mapTextureOffsetInPixelY) mapTextureOffsetInPixelY = 0;
-        if(!targetSizeX) targetSizeX = mapWidthInPixel;
-        if(!targetSizeY) targetSizeY = mapHeightInPixel;
-
         this.ctx.drawImage(
-            map.texture,
+            GameEnvironement.graphics.maps[mapName].texture,
             mapTextureOffsetInPixelX,
             mapTextureOffsetInPixelY,            
             mapWidthInPixel,
