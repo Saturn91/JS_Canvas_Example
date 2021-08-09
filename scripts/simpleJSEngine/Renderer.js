@@ -8,13 +8,13 @@ class Renderer {
         this.canvasHandler.cls();
     }
 
-    renderSprite(sprite, spriteSheetName, x, y, flipX, flipY, targetSize) {
+    drawSprite(sprite, spriteSheetName, x, y, flipX, flipY, targetSize) {
         let drawSize = targetSize;
         if(!targetSize) drawSize = this.canvasHandler.getSpriteData(sprite, spriteSheetName).tileSize;
         if(this.areaIsOnScreen(x, y, drawSize, drawSize)) this.canvasHandler.drawSprite(sprite, spriteSheetName, x, y, flipX, flipY, drawSize)
     }
 
-    renderMap(mapName, screenX, screenY, mapWidthInPixel, mapHeightInPixel, mapTextureOffsetInPixelX, mapTextureOffsetInPixelY, targetSizeX, targetSizeY) {
+    drawMap(mapName, screenX, screenY, mapWidthInPixel, mapHeightInPixel, mapTextureOffsetInPixelX, mapTextureOffsetInPixelY, targetSizeX, targetSizeY) {
         let map = GameEnvironement.graphics.maps[mapName];
         let tileSize = GameEnvironement.graphics.spriteSheets[map.spriteSheetName].data.tileSize
 
