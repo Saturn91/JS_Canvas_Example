@@ -15,7 +15,7 @@ class MapObject {
         if(this.drawMethode){
             if(!x) x = this.x;
             if(!y) y = this.y;
-            this.drawMethode(canvasHandler, x, y);
+            this.drawMethode(canvasHandler, x - Camera.Singleton.cameraOffset.x, y - Camera.Singleton.cameraOffset.y);
         } 
     }
 }

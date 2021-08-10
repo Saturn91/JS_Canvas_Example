@@ -4,10 +4,13 @@ let map;
 function init() {
     player = new Player();
     map = new MapManager();
+    camera = new Camera();
+    camera.setTarget(player);
 }
 
 function UpdateGame(deltaTime) {
     player.update(deltaTime);
+    camera.update();
 }
 
 function drawObject(canvasHandler, object) {
