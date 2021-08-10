@@ -11,7 +11,11 @@ class MapObject {
         this.drawMethode = drawMethode;
     }
 
-    draw(canvasHandler) {
-        if(this.drawMethode) this.drawMethode(canvasHandler, this.x, this.y);
+    draw(canvasHandler, x, y) {
+        if(this.drawMethode){
+            if(!x) x = this.x;
+            if(!y) y = this.y;
+            this.drawMethode(canvasHandler, x, y);
+        } 
     }
 }
