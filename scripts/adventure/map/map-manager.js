@@ -46,7 +46,7 @@ class MapManager {
     }
 
     drawBehindPlayer(canvasHandler, player) {
-        canvasHandler.drawMap('level_0_0', 0 - Camera.Singleton.cameraOffset.x, 0 - Camera.Singleton.cameraOffset.y);
+        canvasHandler.drawMap('level_0_0', Camera.Singleton.calcOffsetX(0), Camera.Singleton.calcOffsetY(0));
         this.objects.forEach(object => {
             if(object.y + object.height < player.y+player.height) {
                 object.draw(canvasHandler);

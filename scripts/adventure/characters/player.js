@@ -83,7 +83,7 @@ class Player {
         }
         this.lastAnimation = this.actualAnimation;
 
-        this.animations[this.actualAnimation].draw(canvasHandler, this.x - Camera.Singleton.cameraOffset.x, this.y - Camera.Singleton.cameraOffset.y)
+        this.animations[this.actualAnimation].draw(canvasHandler, Camera.Singleton.calcOffsetX(this.x), Camera.Singleton.calcOffsetY(this.y))
     }
 
     update(deltaTime) {
