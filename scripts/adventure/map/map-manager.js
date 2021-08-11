@@ -79,6 +79,9 @@ class MapManager {
 
     initMaps() {
         engine.addMap('level_0_0', 'main-terrain' , level_0_0_mapData)
+        let mapWidth = 30*16;
+        let mapHeight = 30*16;
+        Camera.Singleton.setBoundries(new Vector2f(0,0), new Vector2f(mapWidth,mapHeight));
         this.initTrees();
         
     }

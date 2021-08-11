@@ -3,8 +3,8 @@ let map;
 
 function init() {
     player = new Player();
-    map = new MapManager();
     camera = new Camera();
+    map = new MapManager();   
     camera.setTarget(player);
 }
 
