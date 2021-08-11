@@ -13,8 +13,15 @@ class Camera {
     }
 
     setBoundries(min, max) {
-        this.min = new Vector2f(min.x + this.width / 2, min.y + this.height / 2);
-        this.max = new Vector2f(max.x - this.width / 2, max.y - this.height / 2);
+        this.min = new Vector2f(
+            this.private_calcOffset(min.x, - this.width), 
+            this.private_calcOffset(min.y, - this.height)
+        );
+
+        this.max = new Vector2f(
+            this.private_calcOffset(max.x, this.width), 
+            this.private_calcOffset(max.y, this.height)
+        );
     }
 
     setTarget(object) {
