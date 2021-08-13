@@ -37,21 +37,16 @@ class MapManager {
         this.initMaps();        
     }
 
-    drawInFrontOfPlayer(canvasHandler, player) {
+    draw(canvasHandler) {
+        canvasHandler.drawMap('level_0_0', Camera.Singleton.calcOffsetX(0), Camera.Singleton.calcOffsetY(0));
+        this.objects.sort(this.sortObjectInY);
         this.objects.forEach(object => {
-            if(object.y + object.height >= player.y+player.height) {
-                object.draw(canvasHandler);
-            }
+            object.draw(canvasHandler);           
         });
     }
 
-    drawBehindPlayer(canvasHandler, player) {
-        canvasHandler.drawMap('level_0_0', Camera.Singleton.calcOffsetX(0), Camera.Singleton.calcOffsetY(0));
-        this.objects.forEach(object => {
-            if(object.y + object.height < player.y+player.height) {
-                object.draw(canvasHandler);
-            }
-        });
+    sortObjectInY(a, b) {
+        return (a.y + a.yOffsetHeightSort) - (b.y + b.yOffsetHeightSort);
     }
 
     /**
@@ -100,5 +95,9 @@ class MapManager {
                 }                
             }
         }       
+    }
+
+    addObject(mapObject) {
+        this.objects.push(mapObject);
     }
 }

@@ -1,7 +1,7 @@
 class Player extends MapObject {
     
     constructor() {
-        super(0,0,4*16,5*16, new Rect(3, 3, 10, 13));
+        super(0,0,4*16,5*16, 16, new Rect(3, 3, 10, 13));
         super.setDraw((canvasHandler) => {
             if(this.actualAnimation != this.lastAnimation) {
                 this.animations[this.actualAnimation].play(true);
@@ -10,7 +10,6 @@ class Player extends MapObject {
     
             this.animations[this.actualAnimation].draw(canvasHandler, Camera.Singleton.calcOffsetX(this.x), Camera.Singleton.calcOffsetY(this.y))
         });
-
 
         this.x = GameEnvironement.graphics.resolutionX/2 - 8;
         this.y = GameEnvironement.graphics.resolutionY/2 - 16;

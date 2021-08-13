@@ -4,7 +4,8 @@ let map;
 function init() {
     player = new Player();
     camera = new Camera();
-    map = new MapManager();   
+    map = new MapManager();  
+    map.addObject(player);
     camera.setTarget(player);
 }
 
@@ -20,9 +21,7 @@ function drawObject(canvasHandler, object) {
 function DrawGame(canvasHandler) {
     canvasHandler.cls();
 
-    map.drawBehindPlayer(canvasHandler, player);
-    player.draw(canvasHandler);
-    map.drawInFrontOfPlayer(canvasHandler, player);
+    map.draw(canvasHandler);
 
     canvasHandler.drawText("fps: " + Math.round(GameEnvironement.properties.actual_fps), 2, 7, '#ffffff', 100);
 }

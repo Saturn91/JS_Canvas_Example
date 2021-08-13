@@ -1,11 +1,12 @@
 class MapObject {
     static showCollider = false;
-    constructor(xPos, yPos, width, height, collider) {
+    constructor(xPos, yPos, width, height, yOffsetHeightSort, collider) {
         this.x = xPos;
         this.y = yPos;
         this.width = width;
         this.height = height;
         this.drawMethode = undefined;
+        this.yOffsetHeightSort = yOffsetHeightSort;
         this.collider = collider;
     }
 
