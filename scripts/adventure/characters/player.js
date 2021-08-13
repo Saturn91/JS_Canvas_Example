@@ -1,4 +1,5 @@
 class Player {
+    
     constructor() {
         this.x = GameEnvironement.graphics.resolutionX/2 - 8;
         this.y = GameEnvironement.graphics.resolutionY/2 - 16;
@@ -9,13 +10,14 @@ class Player {
         this.animations = {};
         this.actualAnimation = 'idle';
         this.lastAnimation = this.actualAnimation;
+        this.playerSpriteSheet = 'char1_sprites';
         this.defineAnimations();
     }
 
     defineAnimations() {
         this.animations['idle'] = new SpriteAnimation('player-idle', [
-            new Sprite(4, 'char1_sprites'),
-            new Sprite(5, 'char1_sprites')
+            new Sprite(4, this.playerSpriteSheet),
+            new Sprite(5, this.playerSpriteSheet)
         ],
         [
             500,
@@ -26,10 +28,10 @@ class Player {
 
         this.animations['walk_right'] = new SpriteAnimation('player-walk-right', 
         [
-            new Sprite(0, 'char1_sprites'),
-            new Sprite(2, 'char1_sprites'),
-            new Sprite(0, 'char1_sprites'),
-            new Sprite(3, 'char1_sprites')],
+            new Sprite(0, this.playerSpriteSheet),
+            new Sprite(2, this.playerSpriteSheet),
+            new Sprite(0, this.playerSpriteSheet),
+            new Sprite(3, this.playerSpriteSheet)],
         [   200,
             200,
             200,
@@ -39,10 +41,10 @@ class Player {
 
         this.animations['walk_left'] = new SpriteAnimation('player-walk-left', 
         [
-            new Sprite(0, 'char1_sprites', true),
-            new Sprite(2, 'char1_sprites', true),
-            new Sprite(0, 'char1_sprites', true),
-            new Sprite(3, 'char1_sprites', true)],
+            new Sprite(0, this.playerSpriteSheet, true),
+            new Sprite(2, this.playerSpriteSheet, true),
+            new Sprite(0, this.playerSpriteSheet, true),
+            new Sprite(3, this.playerSpriteSheet, true)],
         [   200,
             200,
             200,
@@ -52,10 +54,10 @@ class Player {
 
         this.animations['walk_up'] = new SpriteAnimation('player-walk-up', 
         [
-            new Sprite(8, 'char1_sprites', true),
-            new Sprite(10, 'char1_sprites', true),
-            new Sprite(8, 'char1_sprites', true),
-            new Sprite(11, 'char1_sprites', true)],
+            new Sprite(8, this.playerSpriteSheet, true),
+            new Sprite(10, this.playerSpriteSheet, true),
+            new Sprite(8, this.playerSpriteSheet, true),
+            new Sprite(11, this.playerSpriteSheet, true)],
         [   200,
             200,
             200,
@@ -65,10 +67,10 @@ class Player {
 
         this.animations['walk_down'] = new SpriteAnimation('player-walk-down', 
         [
-            new Sprite(4, 'char1_sprites', true),
-            new Sprite(6, 'char1_sprites', true),
-            new Sprite(4, 'char1_sprites', true),
-            new Sprite(7, 'char1_sprites', true)],
+            new Sprite(4, this.playerSpriteSheet, true),
+            new Sprite(6, this.playerSpriteSheet, true),
+            new Sprite(4, this.playerSpriteSheet, true),
+            new Sprite(7, this.playerSpriteSheet, true)],
         [   200,
             200,
             200,

@@ -33,11 +33,11 @@ class Renderer {
     }
 
     drawRect(x, y, w, h, color) {
-        if(this.areaIsOnScreen(x, y, w, h)) this.canvasHandlerdrawRect(x, y, w, h, color);
+        this.canvasHandler.drawRect(x, y, w, h, color);
     }
 
     fillRect(x, y, w, h, color) {
-        if(this.areaIsOnScreen(x, y, w, h)) this.fillRect(x, y, w, h, color);
+        this.canvasHandler.fillRect(x, y, w, h, color);
     }
 
     positionIsOnScreen(x, y) {
