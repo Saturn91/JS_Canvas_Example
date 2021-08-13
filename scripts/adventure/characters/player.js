@@ -1,7 +1,7 @@
 class Player extends MapObject {
     
     constructor() {
-        super(0,0,4*16,5*16, 16, new Rect(3, 3, 10, 13));
+        super(0,0,4*16,5*16, 16, new Rect(4, 11, 8, 5));
         super.setDraw((canvasHandler) => {
             if(this.actualAnimation != this.lastAnimation) {
                 this.animations[this.actualAnimation].play(true);
@@ -96,29 +96,37 @@ class Player extends MapObject {
 
         this.actualAnimation = 'idle'        
 
+        let transformX = 0;
+        let transformY = 0;
+
         let up = GameEnvironement.input.cmdDown['up'];
         let down = GameEnvironement.input.cmdDown['down'];
         if((up &! down) || (down &! up)) {
             if(up) {
-                this.y -= this.speed * deltaTime/1000;
+                transformY -= this.speed * deltaTime/1000;
                 this.actualAnimation = 'walk_up';
             }
             if(down) {
-                this.y += this.speed * deltaTime/1000;
+                transformY += this.speed * deltaTime/1000;
                 this.actualAnimation = 'walk_down';
             }
         }
 
         if((right &! left) || (left &! right)) {
             if(right) {
-                this.x += this.speed * deltaTime/1000;
+                transformX += this.speed * deltaTime/1000;
                 this.actualAnimation = 'walk_right';
             }
             if(left) {
-                this.x -= this.speed * deltaTime/1000;
+                transformX -= this.speed * deltaTime/1000;
                 this.actualAnimation = 'walk_left';
             }
         }
+
+        //check position
+        let result = map.isWalkable(this, transformX, transformY);
+        if(result.walkableX) this.x += transformX;
+        if(result.walkableY) this.y += transformY;    
 
         this.animations[this.actualAnimation].update();
     }

@@ -28,7 +28,7 @@ const level_0_0_mapData = [
     [0,64,0,33,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,66,0,0],
     [33,80,81,81,81,81,81,81,81,53,1,1,1,51,81,81,81,81,81,81,81,81,81,81,81,81,81,82,0,0],
     [0,0,0,33,0,0,0,0,33,64,1,1,1,66,0,0,33,0,0,0,0,0,0,0,33,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0,0,0,64,1,1,1,66,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     ]; //use mapData in engine.addMap('level_0_0', 'main-terrain' , yourMapData)
 
 class MapManager {
@@ -82,7 +82,7 @@ class MapManager {
     }
 
     initTrees() {
-        this.initObject('tree1', 'tree1', 0, 0, 4, 5);
+        this.initObject('tree1', 'tree1', 0, 0, 4, 6);
         //read out trees from map (Tile 33 with no tile 17 on top)
         for(let y = 0; y < level_0_0_mapData.length; y++) {
             for(let x = 0; x < level_0_0_mapData[0].length; x++) {
@@ -99,5 +99,35 @@ class MapManager {
 
     addObject(mapObject) {
         this.objects.push(mapObject);
+    }
+
+    isWalkable(object, xOffset = 0, yOffset = 0) {
+        let walkableX = true;
+        let walkableY = true;
+
+        for(let i = 0; i < this.objects.length; i++) {
+            if(object != this.objects[i]) {
+                if(collide(object.getCollider(object.x + xOffset, object.y), this.objects[i].getCollider())){
+                    walkableX = false;
+                    break;
+                }
+            }            
+        }
+
+        for(let i = 0; i < this.objects.length; i++) {
+            if(object != this.objects[i]) {
+                if(collide(object.getCollider(object.x, object.y + yOffset), this.objects[i].getCollider())){
+                    walkableY = false;
+                    break;
+                }
+            }            
+        }
+        
+        return {
+            walkableX,
+            walkableY,
+            overlapX: 0,
+            overlapY: 0
+        };
     }
 }

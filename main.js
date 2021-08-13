@@ -39,8 +39,6 @@ GameEnvironement.graphics.resolutionX = 200;
 GameEnvironement.graphics.resolutionY = 150;
 GameEnvironement.graphics.clearColor = '#00E436';
 
-MapObject.showCollider = true;
-
 initSpriteSheets();
 
 const engine = new Engine();
