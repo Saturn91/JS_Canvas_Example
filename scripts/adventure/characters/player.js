@@ -1,6 +1,17 @@
-class Player {
+class Player extends MapObject {
     
     constructor() {
+        super(0,0,4*16,5*16, new Rect(3, 3, 10, 13));
+        super.setDraw((canvasHandler) => {
+            if(this.actualAnimation != this.lastAnimation) {
+                this.animations[this.actualAnimation].play(true);
+            }
+            this.lastAnimation = this.actualAnimation;
+    
+            this.animations[this.actualAnimation].draw(canvasHandler, Camera.Singleton.calcOffsetX(this.x), Camera.Singleton.calcOffsetY(this.y))
+        });
+
+
         this.x = GameEnvironement.graphics.resolutionX/2 - 8;
         this.y = GameEnvironement.graphics.resolutionY/2 - 16;
         this.width = 8;
@@ -77,15 +88,6 @@ class Player {
             200]
         );
         this.animations['walk_down'].setDurationMultiplier(1.5);
-    }
-
-    draw(canvasHandler) {
-        if(this.actualAnimation != this.lastAnimation) {
-            this.animations[this.actualAnimation].play(true);
-        }
-        this.lastAnimation = this.actualAnimation;
-
-        this.animations[this.actualAnimation].draw(canvasHandler, Camera.Singleton.calcOffsetX(this.x), Camera.Singleton.calcOffsetY(this.y))
     }
 
     update(deltaTime) {
