@@ -1,15 +1,19 @@
 let player;
+let testNPC;
 let map;
 
 function init() {
-    player = new Player();
+    player = new Player(GameEnvironement.graphics.resolutionX/2 - 8, GameEnvironement.graphics.resolutionY/2 - 16);
+    testNPC = new TestNPC(32,32);
     camera = new Camera();
     map = new MapManager();  
     map.addObject(player);
+    map.addObject(testNPC);
     camera.setTarget(player);
 }
 
 function UpdateGame(deltaTime) {
+    map.update();
     player.update(deltaTime);
     camera.update();
 }

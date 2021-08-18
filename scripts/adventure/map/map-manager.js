@@ -45,6 +45,12 @@ class MapManager {
         });
     }
 
+    update() {
+        this.objects.forEach(object => {
+            if(object.update) object.update();
+        });
+    }
+
     sortObjectInY(a, b) {
         return (a.y + a.yOffsetHeightSort) - (b.y + b.yOffsetHeightSort);
     }
