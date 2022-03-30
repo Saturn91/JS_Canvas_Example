@@ -11,7 +11,7 @@ class Renderer {
     drawSprite(sprite, spriteSheetName, x, y, flipX, flipY, targetSize) {
         let drawSize = targetSize;
         if(!targetSize) drawSize = this.canvasHandler.getSpriteData(sprite, spriteSheetName).tileSize;
-        if(this.areaIsOnScreen(x, y, drawSize, drawSize)) this.canvasHandler.drawSprite(sprite, spriteSheetName, x, y, flipX, flipY, drawSize)
+        this.canvasHandler.drawSprite(sprite, spriteSheetName, x, y, flipX, flipY, drawSize)
     }
 
     drawMap(mapName, screenX, screenY, mapWidthInPixel, mapHeightInPixel, mapTextureOffsetInPixelX, mapTextureOffsetInPixelY, targetSizeX, targetSizeY) {
@@ -25,7 +25,7 @@ class Renderer {
         if(!targetSizeX) targetSizeX = mapWidthInPixel;
         if(!targetSizeY) targetSizeY = mapHeightInPixel;
 
-        if(this.areaIsOnScreen(screenX, screenY, targetSizeX, targetSizeY)) this.canvasHandler.drawMap(mapName, screenX, screenY, mapWidthInPixel, mapHeightInPixel, mapTextureOffsetInPixelX, mapTextureOffsetInPixelY, targetSizeX, targetSizeY);
+        this.canvasHandler.drawMap(mapName, screenX, screenY, mapWidthInPixel, mapHeightInPixel, mapTextureOffsetInPixelX, mapTextureOffsetInPixelY, targetSizeX, targetSizeY);
     }
 
     drawText(text, x, y, color, maxWidth) {
@@ -33,11 +33,11 @@ class Renderer {
     }
 
     drawRect(x, y, w, h, color) {
-        if(this.areaIsOnScreen(x, y, w, h)) this.canvasHandlerdrawRect(x, y, w, h, color);
+        this.canvasHandler.drawRect(x, y, w, h, color);
     }
 
     fillRect(x, y, w, h, color) {
-        if(this.areaIsOnScreen(x, y, w, h)) this.fillRect(x, y, w, h, color);
+        this.canvasHandler.fillRect(x, y, w, h, color);
     }
 
     positionIsOnScreen(x, y) {
