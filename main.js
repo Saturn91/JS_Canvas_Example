@@ -10,6 +10,9 @@ function init() {
     map.addObject(player);
     map.addObject(testNPC);
     camera.setTarget(player);
+    AddCMD('interact', 'e');
+    engine.addAudio('bump', './assets/bump.wav');
+    engine.addAudio('baaaoooo', './assets/synth.wav');
 }
 
 function UpdateGame(deltaTime) {

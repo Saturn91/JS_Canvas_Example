@@ -98,13 +98,12 @@ class Character extends MapObject {
         if(transformY < 0) this.actualAnimation = 'walk_up';
         if(transformY > 0) this.actualAnimation = 'walk_down';
         if(transformX < 0) this.actualAnimation = 'walk_left';
-        if(transformX > 0) this.actualAnimation = 'walk_right';
-        
+        if(transformX > 0) this.actualAnimation = 'walk_right';        
 
         //check position
         let result = map.isWalkable(this, transformX, transformY);
-        if(result.walkableX) this.x += transformX;
-        if(result.walkableY) this.y += transformY;    
+        if(result.walkableX) this.x += transformX; else engine.playAudio('bump');
+        if(result.walkableY) this.y += transformY; else engine.playAudio('bump');
 
         this.animations[this.actualAnimation].update();
     }
