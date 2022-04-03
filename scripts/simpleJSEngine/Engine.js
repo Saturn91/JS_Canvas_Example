@@ -60,7 +60,10 @@ const GameEnvironement = {
         lastUpdate: 0,
         canvas: undefined,
         engine: undefined
-    }
+    },
+
+    alert: undefined,
+    muted: false,
 }
 
 class Engine {
@@ -75,7 +78,9 @@ class Engine {
 
         let title = document.getElementById('game-name');
         if(title) title.innerText = GameEnvironement.gameName;
-        document.title = GameEnvironement.gameName;        
+        document.title = GameEnvironement.gameName;
+        
+        new SJSE_Alert();
     }
 
     /**
@@ -193,16 +198,11 @@ class Engine {
     /**
      * Add Sfx to GameEnvironement
      *
-     * @param {string} audioName: the id of the defined Sound get the initialized Audio by calling: GameEnvironement.sounds.shx[audioName] -> get {@link https://developer.mozilla.org/en-US/docs/Web/API/HTMLAudioElement HTMLAudioElement}
+     * @param {string} audioName: the id of the defined Sound get the initialized Audio by calling: GameEnvironement.sounds.shx[audioName] this can be controlled with .play() .playInLoop and .stop()
      * @param {string} pathToFile: path to sound file
      */
     addAudio(audioName, pathToFile) {
-        GameEnvironement.sounds.sfx[audioName] = new Audio(pathToFile);
-    }   
-    
-    playAudio(audioName) {
-        const sfx = GameEnvironement.sounds.sfx[audioName];
-        if (!sfx.isPaused) sfx.play();
+        GameEnvironement.sounds.sfx[audioName] = new SJSE_Audio(new Audio(pathToFile));
     }
 }
 

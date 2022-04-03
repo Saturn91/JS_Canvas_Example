@@ -5,10 +5,8 @@
   }
   
   body {
+    position: relative;
     font-family: sans-serif;
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
     background-color: rgb(31, 28, 28);
   }
   
@@ -32,4 +30,51 @@
   
   .gameHolder p {
     color: rgb(150, 150, 150);
+  }
+
+  .alert {
+    z-index: 1;
+    display: block;
+    position: absolute;
+    color: white;
+    top: 30vh;
+    left: calc((100vw - 500px)/2);
+    background-color: rgb(82, 82, 82);
+    width: 500px;
+  }
+
+  .alertHeader {
+    display: flex;
+    justify-content: space-between;
+    height: 30px;
+    background-color: rgb(54, 54, 54);
+    padding-left: 10px;
+  }
+
+  .alertHeader button {
+    width: 30px;
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    border-width: 1px;
+  }
+
+  .alertContent {
+    padding: 10px;
+    min-height: 100px;
+  }
+
+  .buttonHolder {
+    display: flex;
+    gap: 5px;
+    height: 30px;
+  }
+
+  .buttonHolder button{
+    display: block;
+    width: 100%;
+    border-radius: 0;
+    color: white;
+    background-color: grey;
+    border-width: 1px;
   }

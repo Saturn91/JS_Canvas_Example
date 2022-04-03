@@ -21,6 +21,8 @@ class Character extends MapObject {
         this.lastAnimation = this.actualAnimation;
         this.spriteSheet = spriteSheet;
         this.defineAnimations();
+        engine.addAudio('bump', './assets/bump.wav');
+        this.bumpSFX = GameEnvironement.sounds.sfx['bump'];
     }
 
     defineAnimations() {
@@ -102,8 +104,8 @@ class Character extends MapObject {
 
         //check position
         let result = map.isWalkable(this, transformX, transformY);
-        if(result.walkableX) this.x += transformX; else engine.playAudio('bump');
-        if(result.walkableY) this.y += transformY; else engine.playAudio('bump');
+        if(result.walkableX) this.x += transformX; else this.bumpSFX.play();
+        if(result.walkableY) this.y += transformY; else this.bumpSFX.play();
 
         this.animations[this.actualAnimation].update();
     }

@@ -1,6 +1,8 @@
 class Player extends Character {
     constructor(x, y) {
         super(x, y, 'char1_sprites');
+        engine.addAudio('baaaoooo', './assets/synth.wav');
+        this.baooooSFX = GameEnvironement.sounds.sfx['baaaoooo'];
     }
     
 
@@ -21,7 +23,7 @@ class Player extends Character {
             transformX += right ? this.speed * deltaTime/1000 : -this.speed * deltaTime/1000
         }
 
-        if(GameEnvironement.input.cmdDown['interact']) engine.playAudio('baaaoooo');
+        if(GameEnvironement.input.cmdDown['interact']) this.baooooSFX.play();
 
         super.update(deltaTime, transformX, transformY)
     }

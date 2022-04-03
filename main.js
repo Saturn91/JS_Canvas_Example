@@ -2,7 +2,10 @@ let player;
 let testNPC;
 let map;
 
-function init() {
+function init() {    
+    engine.addAudio('music','./assets/music/music.wav');
+    GameEnvironement.sounds.sfx['music'].playInLoop();
+    
     player = new Player(GameEnvironement.graphics.resolutionX/2 - 8, GameEnvironement.graphics.resolutionY/2 - 16);
     testNPC = new TestNPC(32,32);
     camera = new Camera();
@@ -11,8 +14,6 @@ function init() {
     map.addObject(testNPC);
     camera.setTarget(player);
     AddCMD('interact', 'e');
-    engine.addAudio('bump', './assets/bump.wav');
-    engine.addAudio('baaaoooo', './assets/synth.wav');
 }
 
 function UpdateGame(deltaTime) {

@@ -7,8 +7,10 @@
 
     <!-- Engine scripts--> 
     <script src="./scripts/simpleJSEngine/CanvasHandler.js"></script>
+    <script src="./scripts/simpleJSEngine/Audio.js"></script>
     <script src="./scripts/simpleJSEngine/Engine.js"></script>
     <script src="./scripts/simpleJSEngine/Renderer.js"></script>
+    <script src="./scripts/simpleJSEngine/Alerts.js"></script>
     <!--/Engine scripts-->  
 
     <!-- utils-->
@@ -33,12 +35,24 @@
 </head>
 <body>
   <div class="gameHolder">
-    <div>
-      <h1 id="game-name">My Game</h1>
-      <canvas id='canvasObject'></canvas>
-      <p>checkout <a href="https://saturn91.dev/" target="blank">Saturn91.dev</a></p>
-    </div>    
+    <h1 id="game-name">My Game</h1>
+    <canvas id='canvasObject'></canvas>
+    <p>checkout <a href="https://saturn91.dev/" target="blank">Saturn91.dev</a></p>
+  </div>    
+  <div id="alert" class="alert">
+    <div class="alertHeader">
+      <h2 id="alert-title">Allow website to play sound?</h2>
+      <button id="close-btn">X</button>
+      
+    </div>
+    <div class="alertContent" id="alert-content">
+      Content
+    </div>
+    <div class="buttonHolder" id="alert-btn-holder">
+      <button>OK</button>
+      <button>Cancel</button>
+    </div>
   </div>
-  <script src="./main.js"></script>  
+  <script src="./main.js"></script>
 </body>
 </html>
